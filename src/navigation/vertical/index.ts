@@ -12,6 +12,7 @@ import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
+import { ChairSchool, HumanMaleBoard, Laptop, SchoolOutline } from 'mdi-material-ui'
 
 const navigation = (): VerticalNavItemsType => {
   return [
@@ -26,13 +27,40 @@ const navigation = (): VerticalNavItemsType => {
       path: '/account-settings'
     },
     {
+      sectionTitle: 'Management'
+    },
+    {
+      title: 'Quản lý học sinh',
+      icon: SchoolOutline,
+      path: '/students'
+    },
+    {
+      title: 'Quản lý giáo viên',
+      icon: HumanMaleBoard,
+      path: '/teachers'
+    },
+    {
+      title: 'Quản lý lớp học',
+      icon: ChairSchool,
+      path: '/classes'
+    },
+    {
+      title: 'Quản lý môn học',
+      icon: CubeOutline,
+      path: '/subjects'
+    },
+    {
+      title: 'Quản lý thiết bị',
+      icon: Laptop,
+      path: '/devices'
+    },
+    {
       sectionTitle: 'Pages'
     },
     {
       title: 'Login',
       icon: Login,
-      path: '/pages/login',
-      openInNewTab: true
+      path: '/pages/login'
     },
     {
       title: 'Register',
