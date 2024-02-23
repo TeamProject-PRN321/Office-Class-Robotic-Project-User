@@ -3,15 +3,15 @@ import { Calendar, ClockOutline } from 'mdi-material-ui'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-export default function LiveClassItems() {
+export default function DeviceItems() {
   const route = useRouter()
-  const ViewDetailLiveClass = () => {
-    route.push('/classes')
+  const ViewDetailDeviceItems = () => {
+    route.push('/devices')
   }
 
   return (
-    <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column' }}>
-      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>How to Make an Array and it's Type in C#</Typography>
+    <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column', width: '350px', height: '250px' }}>
+      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>Smart TV</Typography>
       <Typography
         sx={{
           border: '1px solid #B0AAAE',
@@ -22,7 +22,7 @@ export default function LiveClassItems() {
           fontWeight: 'bold'
         }}
       >
-        Teacher: Ngô Thị Hương
+        Device ID: DESKTOP-7VJ313T
       </Typography>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <ClockOutline></ClockOutline>
@@ -42,15 +42,15 @@ export default function LiveClassItems() {
           color: '#00C9A7'
         }}
       >
-        Status: Completed
+        Status: Using
       </Typography>
       <Button
         sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
         onClick={() => {
-          ViewDetailLiveClass()
+          ViewDetailDeviceItems()
         }}
       >
-        Attendance
+        View details
       </Button>
     </Card>
   )

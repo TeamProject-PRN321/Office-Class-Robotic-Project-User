@@ -80,7 +80,7 @@ export default function App() {
       <Grid
         item
         container
-        spacing={3}
+        gap={3}
         xs={12}
         md={3}
         lg={3}
@@ -116,7 +116,7 @@ export default function App() {
       <Grid
         item
         container
-        spacing={3}
+        gap={3}
         xs={12}
         md={3}
         lg={3}
@@ -149,7 +149,7 @@ export default function App() {
       <Grid
         item
         container
-        spacing={3}
+        gap={3}
         xs={12}
         md={3}
         lg={3}

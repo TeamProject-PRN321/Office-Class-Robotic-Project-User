@@ -12,7 +12,7 @@ import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
-import { GoogleClassroom, HumanMaleBoard, Laptop, SchoolOutline } from 'mdi-material-ui'
+import { HumanMaleBoard, Laptop, SchoolOutline } from 'mdi-material-ui'
 
 const navigation = (): VerticalNavItemsType => {
   return [
@@ -23,8 +23,8 @@ const navigation = (): VerticalNavItemsType => {
     },
 
     {
-      title: 'Live Classes',
-      icon: GoogleClassroom,
+      title: 'Class',
+      icon: SchoolOutline,
       path: '/classes'
     },
     {
@@ -33,17 +33,13 @@ const navigation = (): VerticalNavItemsType => {
       path: '/subjects'
     },
     {
-      title: 'Teacher',
+      title: 'Professor',
       icon: HumanMaleBoard,
       path: '/teachers'
     },
+
     {
-      title: 'Sinh viên',
-      icon: SchoolOutline,
-      path: '/students'
-    },
-    {
-      title: 'Quản lý thiết bị',
+      title: 'Device',
       icon: Laptop,
       path: '/devices'
     },
