@@ -58,20 +58,21 @@ const TabInfo = () => {
             </DatePickerWrapper>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth type='number' label='Phone' placeholder='(123) 456-7890' />
+            <TextField fullWidth type='number' label='Phone' placeholder='(+84) 358582251' />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label='Website'
-              placeholder='https://example.com/'
-              defaultValue='https://themeselection.com/'
+              placeholder='https://github.com/TeamProject-PRN321/'
+              defaultValue='https://github.com/TeamProject-PRN321/'
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Country</InputLabel>
-              <Select label='Country' defaultValue='USA'>
+              <Select label='Country' defaultValue='Vietnamese'>
+                <MenuItem value='Vietnamese'>Vietnamese</MenuItem>
                 <MenuItem value='USA'>USA</MenuItem>
                 <MenuItem value='UK'>UK</MenuItem>
                 <MenuItem value='Australia'>Australia</MenuItem>
@@ -84,11 +85,12 @@ const TabInfo = () => {
               <InputLabel id='form-layouts-separator-multiple-select-label'>Languages</InputLabel>
               <Select
                 multiple
-                defaultValue={['English']}
+                defaultValue={['Vietnamese']}
                 id='account-settings-multiple-select'
                 labelId='account-settings-multiple-select-label'
                 input={<OutlinedInput label='Languages' id='select-multiple-language' />}
               >
+                <MenuItem value='Vietnamese'>Vietnamese</MenuItem>
                 <MenuItem value='English'>English</MenuItem>
                 <MenuItem value='French'>French</MenuItem>
                 <MenuItem value='Spanish'>Spanish</MenuItem>

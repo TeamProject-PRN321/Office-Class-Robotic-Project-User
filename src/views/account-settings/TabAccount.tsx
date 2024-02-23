@@ -89,18 +89,18 @@ const TabAccount = () => {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Username' placeholder='johnDoe' defaultValue='johnDoe' />
+            <TextField disabled fullWidth label='Username' placeholder='ttqa0508' defaultValue='ttqa0508' />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Name' placeholder='John Doe' defaultValue='John Doe' />
+            <TextField fullWidth label='Name' placeholder='Tran Thien Quoc Anh' defaultValue='Tran Thien Quoc Anh' />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               type='email'
               label='Email'
-              placeholder='johnDoe@example.com'
-              defaultValue='johnDoe@example.com'
+              placeholder='ttqa0508@gmail.com'
+              defaultValue='ttqa0508@gmail.com'
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -108,10 +108,10 @@ const TabAccount = () => {
               <InputLabel>Role</InputLabel>
               <Select label='Role' defaultValue='admin'>
                 <MenuItem value='admin'>Admin</MenuItem>
-                <MenuItem value='author'>Author</MenuItem>
-                <MenuItem value='editor'>Editor</MenuItem>
-                <MenuItem value='maintainer'>Maintainer</MenuItem>
-                <MenuItem value='subscriber'>Subscriber</MenuItem>
+                <MenuItem value='author'>Staff</MenuItem>
+                <MenuItem value='editor'>Professor</MenuItem>
+                <MenuItem value='maintainer'>Student</MenuItem>
+                <MenuItem value='subscriber'>Parent</MenuItem>
               </Select>
             </FormControl>
           </Grid>
