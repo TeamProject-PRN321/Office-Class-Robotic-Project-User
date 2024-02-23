@@ -2,14 +2,25 @@
 import Grid from '@mui/material/Grid'
 
 // ** Demo Components Imports
-import Trophy from 'src/views/dashboard/Trophy'
-import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import { Button, Typography } from '@mui/material'
 import { Launch } from 'mdi-material-ui'
 import LiveClasses from 'src/layouts/components/Dashboard/DashboardLiveClasses'
 import Teachers from 'src/layouts/components/Dashboard/DashboardTeachers'
+import ScheduleDashboard from 'src/layouts/components/Dashboard/DashboardSchedule'
+import { useRouter } from 'next/router'
 
 const Dashboard = () => {
+  const router = useRouter()
+  const ViewAllClass = () => {
+    router.push('/classes')
+  }
+  const ViewAllSchedule = () => {
+    router.push('/subjects')
+  }
+  const ViewAllProfessor = () => {
+    router.push('/teachers')
+  }
+
   return (
     <Grid container direction={'row'} justifyContent={'space-between'}>
       {/* <Grid item xs={12} md={4}>
@@ -18,42 +29,30 @@ const Dashboard = () => {
       <Grid item xs={12} md={8}>
         <StatisticsCard />
       </Grid> */}
-      <Grid item container spacing={3} xs={12} md={3} lg={3} justifyContent={'start'} flexDirection={'column'}>
-        <Grid item display={'flex'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
-          <Typography sx={{ color: 'black', fontWeight: 'bold' }}> Live Classes</Typography>
-          <Button
-            sx={{
-              backgroundColor: '#ecffef',
-              color: '#50bf62',
-              fontWeight: 'bold',
-              fontSize: '13px',
-              textDecoration: 'underline'
-            }}
-          >
-            View All
-            <Launch sx={{ margin: '2px', fontSize: '16px' }}></Launch>
-          </Button>
-        </Grid>
-        <Grid item>
-          <LiveClasses />
-        </Grid>
-        <Grid item>
-          <LiveClasses />
-        </Grid>
-        <Grid item>
-          <LiveClasses />
-        </Grid>
-        <Grid item>
-          <LiveClasses />
-        </Grid>
-        <Grid item>
-          <LiveClasses />
-        </Grid>
-        <Grid item>
-          <LiveClasses />
-        </Grid>
-      </Grid>
-      <Grid item container spacing={3} xs={12} md={5} lg={5} justifyContent={'start'} flexDirection={'column'}>
+      <Grid
+        item
+        container
+        spacing={3}
+        xs={12}
+        md={3}
+        lg={3}
+        justifyContent={'start'}
+        flexDirection={'column'}
+        sx={{
+          height: '700px',
+          overflowY: 'scroll',
+          flexWrap: 'nowrap',
+          '&::-webkit-scrollbar': {
+            width: '6px' // Set the width of the scrollbar
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: theme => theme.palette.grey[500] // Color of the thumb (adjust as needed)
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: theme => theme.palette.grey[200] // Color of the track (adjust as needed)
+          }
+        }}
+      >
         <Grid item display={'flex'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
           <Typography sx={{ color: 'black', fontWeight: 'bold' }}>Schedules</Typography>
           <Button
@@ -64,30 +63,119 @@ const Dashboard = () => {
               fontSize: '13px',
               textDecoration: 'underline'
             }}
+            onClick={() => {
+              ViewAllSchedule()
+            }}
           >
             View All
             <Launch sx={{ margin: '2px', fontSize: '16px' }}></Launch>
           </Button>
         </Grid>
         <Grid item>
-          <WeeklyOverview />
+          <ScheduleDashboard />
         </Grid>
         <Grid item>
-          <Trophy />
+          <ScheduleDashboard />
         </Grid>
         <Grid item>
-          <Trophy />
+          <ScheduleDashboard />
         </Grid>
         <Grid item>
-          <Trophy />
+          <ScheduleDashboard />
         </Grid>
         <Grid item>
-          <Trophy />
+          <ScheduleDashboard />
         </Grid>
       </Grid>
-      <Grid item container spacing={3} xs={12} md={3} lg={3} justifyContent={'start'} flexDirection={'column'}>
+
+      <Grid
+        item
+        container
+        spacing={3}
+        xs={12}
+        md={5}
+        lg={5}
+        justifyContent={'start'}
+        flexDirection={'column'}
+        sx={{
+          height: '700px',
+          overflowY: 'scroll',
+          flexWrap: 'nowrap',
+          '&::-webkit-scrollbar': {
+            width: '6px' // Set the width of the scrollbar
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: theme => theme.palette.grey[500] // Color of the thumb (adjust as needed)
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: theme => theme.palette.grey[200] // Color of the track (adjust as needed)
+          }
+        }}
+      >
         <Grid item display={'flex'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
-          <Typography sx={{ color: 'black', fontWeight: 'bold' }}> Teachers</Typography>
+          <Typography sx={{ color: 'black', fontWeight: 'bold' }}> Live Classes</Typography>
+          <Button
+            sx={{
+              backgroundColor: '#ecffef',
+              color: '#50bf62',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              textDecoration: 'underline'
+            }}
+            onClick={() => {
+              ViewAllClass()
+            }}
+          >
+            View All
+            <Launch sx={{ margin: '2px', fontSize: '16px' }}></Launch>
+          </Button>
+        </Grid>
+        <Grid item>
+          <LiveClasses />
+        </Grid>
+        <Grid item>
+          <LiveClasses />
+        </Grid>
+        <Grid item>
+          <LiveClasses />
+        </Grid>
+        <Grid item>
+          <LiveClasses />
+        </Grid>
+        <Grid item>
+          <LiveClasses />
+        </Grid>
+        <Grid item>
+          <LiveClasses />
+        </Grid>
+      </Grid>
+
+      <Grid
+        item
+        container
+        spacing={3}
+        xs={12}
+        md={3}
+        lg={3}
+        justifyContent={'start'}
+        flexDirection={'column'}
+        sx={{
+          height: '700px',
+          overflowY: 'scroll',
+          flexWrap: 'nowrap',
+          '&::-webkit-scrollbar': {
+            width: '6px' // Set the width of the scrollbar
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: theme => theme.palette.grey[500] // Color of the thumb (adjust as needed)
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: theme => theme.palette.grey[200] // Color of the track (adjust as needed)
+          }
+        }}
+      >
+        <Grid item display={'flex'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
+          <Typography sx={{ color: 'black', fontWeight: 'bold' }}>Professor</Typography>
           <Button
             sx={{
               backgroundColor: '#ffecf9',
@@ -96,22 +184,25 @@ const Dashboard = () => {
               fontSize: '13px',
               textDecoration: 'underline'
             }}
+            onClick={() => {
+              ViewAllProfessor()
+            }}
           >
             View All
             <Launch sx={{ margin: '2px', fontSize: '16px' }}></Launch>
           </Button>
         </Grid>
         <Grid item>
-          <WeeklyOverview />
+          <Teachers />
         </Grid>
         <Grid item>
           <Teachers />
         </Grid>
         <Grid item>
-          <Trophy />
+          <Teachers />
         </Grid>
         <Grid item>
-          <Trophy />
+          <Teachers />
         </Grid>
       </Grid>
       {/* <Grid item  md={6} lg={4}>

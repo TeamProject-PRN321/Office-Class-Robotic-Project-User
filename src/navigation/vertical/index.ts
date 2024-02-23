@@ -12,7 +12,7 @@ import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
-import { ChairSchool, HumanMaleBoard, Laptop, SchoolOutline } from 'mdi-material-ui'
+import { GoogleClassroom, HumanMaleBoard, Laptop, SchoolOutline } from 'mdi-material-ui'
 
 const navigation = (): VerticalNavItemsType => {
   return [
@@ -21,38 +21,39 @@ const navigation = (): VerticalNavItemsType => {
       icon: HomeOutline,
       path: '/'
     },
+
     {
-      title: 'Account Settings',
-      icon: AccountCogOutline,
-      path: '/account-settings'
+      title: 'Live Classes',
+      icon: GoogleClassroom,
+      path: '/classes'
     },
     {
-      sectionTitle: 'Management'
+      title: 'Schedule',
+      icon: CubeOutline,
+      path: '/subjects'
     },
     {
-      title: 'Quản lý học sinh',
-      icon: SchoolOutline,
-      path: '/students'
-    },
-    {
-      title: 'Quản lý giáo viên',
+      title: 'Teacher',
       icon: HumanMaleBoard,
       path: '/teachers'
     },
     {
-      title: 'Quản lý lớp học',
-      icon: ChairSchool,
-      path: '/classes'
-    },
-    {
-      title: 'Quản lý môn học',
-      icon: CubeOutline,
-      path: '/subjects'
+      title: 'Sinh viên',
+      icon: SchoolOutline,
+      path: '/students'
     },
     {
       title: 'Quản lý thiết bị',
       icon: Laptop,
       path: '/devices'
+    },
+    {
+      sectionTitle: 'Setting'
+    },
+    {
+      title: 'Account Settings',
+      icon: AccountCogOutline,
+      path: '/account-settings'
     },
     {
       sectionTitle: 'Pages'

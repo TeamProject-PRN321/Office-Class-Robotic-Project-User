@@ -3,7 +3,7 @@ import { Calendar, ClockOutline } from 'mdi-material-ui'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-export default function LiveClasses() {
+export default function LiveClassItems() {
   const route = useRouter()
   const ViewDetailLiveClass = () => {
     route.push('/classes')
