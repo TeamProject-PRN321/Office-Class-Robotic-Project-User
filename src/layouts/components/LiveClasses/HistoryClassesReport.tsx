@@ -3,7 +3,7 @@ import { Calendar, ClockOutline } from 'mdi-material-ui'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-export default function LiveClassItems() {
+export default function HistoryClassesReport() {
   const route = useRouter()
   const ViewDetailLiveClass = () => {
     route.push('/classes')
@@ -38,11 +38,11 @@ export default function LiveClassItems() {
           padding: '5px',
           fontSize: '14px',
           fontWeight: 'bold',
-          backgroundColor: '#BCECC4',
-          color: '#40C053'
+          backgroundColor: '#4B4453',
+          color: '#D8E4EA'
         }}
       >
-        Status: Starting after 30 minutes
+        Status: Completed
       </Typography>
       <Button
         sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
@@ -50,7 +50,7 @@ export default function LiveClassItems() {
           ViewDetailLiveClass()
         }}
       >
-        John now
+        Attendance Report
       </Button>
     </Card>
   )

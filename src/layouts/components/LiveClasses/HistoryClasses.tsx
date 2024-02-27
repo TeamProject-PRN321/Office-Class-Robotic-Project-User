@@ -1,12 +1,21 @@
-import { Box, Button, Card, Typography } from '@mui/material'
+import { Box, Button, Card, Drawer, Typography } from '@mui/material'
 import { Calendar, ClockOutline } from 'mdi-material-ui'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+import AttendanceReportDrawer from './AttendanceRoport/AttendanceReportDrawer'
 
-export default function LiveClassItems() {
+type Anchor = 'right'
+
+export default function HistoryClasses() {
   const route = useRouter()
   const ViewDetailLiveClass = () => {
     route.push('/classes')
+  }
+
+  const [state, setState] = React.useState(false)
+
+  const toggleDrawer = () => {
+    setState(!state)
   }
 
   return (
@@ -38,20 +47,24 @@ export default function LiveClassItems() {
           padding: '5px',
           fontSize: '14px',
           fontWeight: 'bold',
-          backgroundColor: '#BCECC4',
-          color: '#40C053'
+          backgroundColor: '#C4FCEF',
+          color: '#00C9A7'
         }}
       >
-        Status: Starting after 30 minutes
+        Status: Completed
       </Typography>
+
       <Button
         sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
         onClick={() => {
-          ViewDetailLiveClass()
+          toggleDrawer()
         }}
       >
-        John now
+        Attendance
       </Button>
+      <Drawer anchor={'right'} open={state} onClose={toggleDrawer} sx={{}}>
+        <AttendanceReportDrawer></AttendanceReportDrawer>
+      </Drawer>
     </Card>
   )
 }

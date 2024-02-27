@@ -17,6 +17,8 @@ import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
 import TabContext from '@mui/lab/TabContext'
 import CardContent from '@mui/material/CardContent'
+import HistoryClasses from 'src/layouts/components/LiveClasses/HistoryClasses'
+import HistoryClassesReport from 'src/layouts/components/LiveClasses/HistoryClassesReport'
 
 export default function App() {
   // ** State
@@ -115,25 +117,25 @@ export default function App() {
                 </Button>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <HistoryClasses></HistoryClasses>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <HistoryClassesReport></HistoryClassesReport>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <HistoryClasses></HistoryClasses>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <HistoryClassesReport></HistoryClassesReport>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <HistoryClassesReport></HistoryClassesReport>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <HistoryClasses></HistoryClasses>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <HistoryClassesReport></HistoryClassesReport>
               </Grid>
             </Grid>
           </TabPanel>

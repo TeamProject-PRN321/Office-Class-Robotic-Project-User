@@ -50,6 +50,7 @@ export default function App() {
                   sx={{
                     backgroundColor: '#C4FCEF',
                     color: '#50bf62',
+                    textDecoration: 'underline',
                     fontWeight: 'bold',
                     fontSize: '13px',
                     ':hover': {
@@ -102,6 +103,7 @@ export default function App() {
                     backgroundColor: '#C4FCEF',
                     color: '#50bf62',
                     fontWeight: 'bold',
+                    textDecoration: 'underline',
                     fontSize: '13px',
                     ':hover': {
                       color: 'white',
