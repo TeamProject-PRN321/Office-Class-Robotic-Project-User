@@ -42,7 +42,19 @@ const rows = [
   createData('SE150628', 'Nguyễn Thành Nhân', 'C#', 'Absent', false),
   createData('SE150629', 'Nguyễn Ngọc Thái Vĩ', 'C#', 'Absent', false),
   createData('SE150630', 'Nguyễn Thanh Duy', 'C#', 'Absent', false),
-  createData('SE150631', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false)
+  createData('SE150631', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150632', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150633', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150634', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150635', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150636', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150637', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150638', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150639', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150640', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150641', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150642', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false),
+  createData('SE150643', 'Nguyễn Trung Hiếu', 'C#', 'Absent', false)
 ]
 
 type Student = { StudentID: string; StudentName: string; Class: string; Attendance: string; isAttendance?: boolean }

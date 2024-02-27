@@ -1,17 +1,9 @@
 import { Box, Button, Card, Drawer, Typography } from '@mui/material'
 import { Calendar, ClockOutline } from 'mdi-material-ui'
-import { useRouter } from 'next/router'
 import * as React from 'react'
 import AttendanceReportDrawer from './AttendanceRoport/AttendanceReportDrawer'
 
-type Anchor = 'right'
-
 export default function HistoryClasses() {
-  const route = useRouter()
-  const ViewDetailLiveClass = () => {
-    route.push('/classes')
-  }
-
   const [state, setState] = React.useState(false)
 
   const toggleDrawer = () => {
