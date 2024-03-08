@@ -1,3 +1,5 @@
+'use client'
+
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'
@@ -29,6 +31,11 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import { AxiosProvider } from 'src/@core/context/axiosContext'
+import { AuthProvider } from 'src/@core/context/ContextAUTH'
+
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -70,13 +77,32 @@ const App = (props: ExtendedAppProps) => {
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
 
-      <SettingsProvider>
-        <SettingsConsumer>
-          {({ settings }) => {
-            return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
-          }}
-        </SettingsConsumer>
-      </SettingsProvider>
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{
+          zIndex: '999990 !important'
+        }}
+      />
+
+      <AxiosProvider>
+        <AuthProvider>
+          <SettingsProvider>
+            <SettingsConsumer>
+              {({ settings }) => {
+                return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
+              }}
+            </SettingsConsumer>
+          </SettingsProvider>
+        </AuthProvider>
+      </AxiosProvider>
     </CacheProvider>
   )
 }
