@@ -145,7 +145,7 @@ const Slot = ({ data }: { data: Subject }) => {
           left: '0.5px',
           backgroundColor: '#b39bde',
           zIndex: 999999,
-          width: widthOfASlot,
+          width: widthOfASlot + 5,
           height: heightOfASlot * 2 - 2,
           borderRadius: 0,
           ':hover': {

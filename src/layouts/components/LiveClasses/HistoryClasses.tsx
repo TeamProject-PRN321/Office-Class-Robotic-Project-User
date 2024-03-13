@@ -54,6 +54,8 @@ export default function HistoryClasses() {
       >
         Attendance
       </Button>
+
+      {/* Show drawer attendance */}
       <Drawer anchor={'right'} open={state} onClose={toggleDrawer} sx={{}}>
         <AttendanceReportDrawer></AttendanceReportDrawer>
       </Drawer>
