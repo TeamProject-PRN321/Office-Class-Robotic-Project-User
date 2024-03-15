@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, ElementType, ChangeEvent, SyntheticEvent } from 'react'
+import { useState, ElementType, ChangeEvent, SyntheticEvent, forwardRef, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -20,6 +20,15 @@ import Button, { ButtonProps } from '@mui/material/Button'
 
 // ** Icons Imports
 import Close from 'mdi-material-ui/Close'
+import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
+import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+import DatePicker from 'react-datepicker'
+import useAuth from 'src/@core/hooks/useAuth'
+import useAxios from 'src/@core/hooks/useAxios'
+
+const CustomInput = forwardRef((props, ref) => {
+  return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
+})
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 120,
@@ -45,20 +54,55 @@ const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
   }
 }))
 
+export interface ProfileModel {
+  userName: string
+  fullName: string
+  email: string
+  phoneNumber: string
+  dateOfBirth: string
+  gender: string
+  address: string
+  photoUrl: string
+  studentId?: string
+  parent?: ProfileModel
+  parentId?: string
+}
+
 const TabAccount = () => {
   // ** State
   const [openAlert, setOpenAlert] = useState<boolean>(true)
   const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
+  const [date, setDate] = useState<Date | null | undefined>(null)
 
-  const onChange = (file: ChangeEvent) => {
-    const reader = new FileReader()
-    const { files } = file.target as HTMLInputElement
-    if (files && files.length !== 0) {
-      reader.onload = () => setImgSrc(reader.result as string)
+  // const [usernames, setUsername] = useState<string>('');
+  // const [fullname, setFullname] = useState<string>('');
+  // const [email, setEmail] = useState<string>('')
+  // const [phone, setPhone] = useState<string>('')
+  // const [birthday, setBirthday] = useState<string>('')
+  // const [gender, setGender] = useState<string>('')
+  // const [address, setAddress] = useState<string>('')
+  // const [photo, setPhoto] = useState<string>('')
 
-      reader.readAsDataURL(files[0])
+  const [profile, setProfile] = useState<ProfileModel>({} as ProfileModel)
+
+  const auth = useAuth()
+  const axios = useAxios()
+
+  useEffect(() => {
+    const handelProfile = async () => {
+      try {
+        if (!auth.Id) return
+
+        const data = await axios.call('get', '/api/v1/student/get-student-by-student-id/' + auth.Id)
+        setProfile(data)
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
     }
-  }
+
+    handelProfile()
+  }, [auth.Id])
 
   return (
     <CardContent>
@@ -73,7 +117,15 @@ const TabAccount = () => {
                   <input
                     hidden
                     type='file'
-                    onChange={onChange}
+                    onChange={(file: ChangeEvent) => {
+                      const reader = new FileReader()
+                      const { files } = file.target as HTMLInputElement
+                      if (files && files.length !== 0) {
+                        reader.onload = () => setImgSrc(reader.result as string)
+
+                        reader.readAsDataURL(files[0])
+                      }
+                    }}
                     accept='image/png, image/jpeg'
                     id='account-settings-upload-image'
                   />
@@ -88,10 +140,10 @@ const TabAccount = () => {
             </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField disabled fullWidth label='Username' placeholder='ttqa0508' defaultValue='ttqa0508' />
+            <TextField disabled fullWidth label='Username' value={profile.userName} />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Name' placeholder='Tran Thien Quoc Anh' defaultValue='Tran Thien Quoc Anh' />
+            <TextField fullWidth label='Name' value={profile.fullName} />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -102,31 +154,58 @@ const TabAccount = () => {
               defaultValue='ttqa0508@gmail.com'
             />
           </Grid>
-          {/* <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Role</InputLabel>
-              <Select label='Role' defaultValue='admin'>
-                <MenuItem value='admin'>Admin</MenuItem>
-                <MenuItem value='editor'>Teacher</MenuItem>
-                <MenuItem value='maintainer'>Student</MenuItem>
-                <MenuItem value='subscriber'>Parent</MenuItem>
-              </Select>
+          <Grid item xs={12} sm={6}>
+            <TextField fullWidth type='number' label='Phone' placeholder='(+84) 358582251' />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <DatePickerWrapper>
+              <DatePicker
+                selected={date}
+                showYearDropdown
+                showMonthDropdown
+                id='account-settings-id'
+                placeholderText='DD-MM-YYYY'
+                customInput={<CustomInput />}
+                onChange={(date: Date | null) => setDate(date)}
+              />
+            </DatePickerWrapper>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl>
+              <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
+              <RadioGroup row defaultValue='male' aria-label='gender' name='account-settings-info-radio'>
+                <FormControlLabel value='male' label='Male' control={<Radio />} />
+                <FormControlLabel value='female' label='Female' control={<Radio />} />
+                <FormControlLabel value='other' label='Other' control={<Radio />} />
+              </RadioGroup>
             </FormControl>
-          </Grid> */}
+          </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
-              <Select label='Status' defaultValue='active'>
+              <Select disabled label='Status' defaultValue='active'>
                 <MenuItem value='active'>Active</MenuItem>
                 <MenuItem value='inactive'>Inactive</MenuItem>
                 <MenuItem value='pending'>Pending</MenuItem>
               </Select>
             </FormControl>
           </Grid>
-          r
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel>Role</InputLabel>
+              <Select disabled label='Role' defaultValue='admin'>
+                <MenuItem value='admin'>Admin</MenuItem>
+                <MenuItem value='editor'>Teacher</MenuItem>
+                <MenuItem value='maintainer'>Student</MenuItem>
+                <MenuItem value='subscriber'>Parent</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
           {/* <Grid item xs={12} sm={6}>
             <TextField fullWidth label='Company' placeholder='ABC Pvt. Ltd.' defaultValue='ABC Pvt. Ltd.' />
           </Grid> */}
+
           {openAlert ? (
             <Grid item xs={12} sx={{ mb: 3 }}>
               <Alert

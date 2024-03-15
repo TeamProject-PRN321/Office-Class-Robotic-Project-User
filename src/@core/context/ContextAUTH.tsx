@@ -22,6 +22,7 @@ export type UserLoginContext = {
   logout: () => void
   isLogin: () => boolean
   role: string
+  Id: string
 }
 
 const initialAuth = {
@@ -47,7 +48,8 @@ export const AuthContext = createContext<UserLoginContext>({
   isLogin: () => {
     return false
   },
-  role: ''
+  role: '',
+  Id: ''
 })
 
 export interface JwtDecodeModel {
@@ -65,6 +67,7 @@ export interface JwtDecodeModel {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userLogin, setUserLogin] = useState<UserLoginContextModel>(initialAuth)
   const [role, setRole] = useState<string>('')
+  const [Uid, setUid] = useState<string>('')
   const [isRemember, setIsRemember] = useState<boolean>(false)
   const { call } = useAxios()
   const router = useRouter()
@@ -100,6 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const decodeToken = jwtDecode(token)
         console.log(decodeToken)
         setRole((decodeToken as JwtDecodeModel).role)
+        setUid((decodeToken as JwtDecodeModel).Id)
       } else {
         if (!token) logout()
       }
@@ -135,6 +139,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const decodeToken = jwtDecode(response.accessToken)
       console.log(decodeToken)
       setRole((decodeToken as JwtDecodeModel).role)
+      setUid((decodeToken as JwtDecodeModel).Id)
 
       return Promise.resolve(true)
     } catch (error) {
@@ -159,7 +164,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ userLogin, login, toggleRemember, logout, isLogin, role }}>
+    <AuthContext.Provider value={{ userLogin, login, toggleRemember, logout, isLogin, role, Id: Uid }}>
       {children}
     </AuthContext.Provider>
   )
