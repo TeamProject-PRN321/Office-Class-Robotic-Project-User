@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import useAxios from '../hooks/useAxios'
 import { useRouter } from 'next/router'
+import { jwtDecode } from 'jwt-decode'
 
 export type AppUser = {
   username: string
@@ -20,6 +21,7 @@ export type UserLoginContext = {
   toggleRemember: (value: boolean) => void
   logout: () => void
   isLogin: () => boolean
+  role: string
 }
 
 const initialAuth = {
@@ -44,11 +46,25 @@ export const AuthContext = createContext<UserLoginContext>({
   },
   isLogin: () => {
     return false
-  }
+  },
+  role: ''
 })
+
+export interface JwtDecodeModel {
+  email: string
+  sub: string
+  jti: string
+  Id: string
+  'http://schemas.microsoft.com/ws/2008/06/identity/claims/role': string
+  role: string
+  exp: number
+  iss: string
+  aud: string
+}
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userLogin, setUserLogin] = useState<UserLoginContextModel>(initialAuth)
+  const [role, setRole] = useState<string>('')
   const [isRemember, setIsRemember] = useState<boolean>(false)
   const { call } = useAxios()
   const router = useRouter()
@@ -80,6 +96,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             accessToken: token
           }
         } as UserLoginContextModel)
+
+        const decodeToken = jwtDecode(token)
+        console.log(decodeToken)
+        setRole((decodeToken as JwtDecodeModel).role)
       } else {
         if (!token) logout()
       }
@@ -112,6 +132,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       localStorage.setItem('ACCESS_TOKEN', JSON.stringify(response.accessToken))
 
+      const decodeToken = jwtDecode(response.accessToken)
+      console.log(decodeToken)
+      setRole((decodeToken as JwtDecodeModel).role)
+
       return Promise.resolve(true)
     } catch (error) {
       console.log(error)
@@ -135,7 +159,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ userLogin, login, toggleRemember, logout, isLogin }}>
+    <AuthContext.Provider value={{ userLogin, login, toggleRemember, logout, isLogin, role }}>
       {children}
     </AuthContext.Provider>
   )

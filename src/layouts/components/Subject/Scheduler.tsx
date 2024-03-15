@@ -16,6 +16,7 @@ import { MenuLeftOutline, MenuRightOutline } from 'mdi-material-ui'
 import moment from 'moment'
 import { Fragment, useEffect, useState } from 'react'
 import ListIcon from '@mui/icons-material/List'
+import useAxios from 'src/@core/hooks/useAxios'
 
 export interface Subject {
   className: string
@@ -27,113 +28,181 @@ export interface Subject {
   totalStudentInClass: number
 }
 
-const subjects: Subject[] = [
-  {
-    className: 'Math',
-    classroomName: 'A101',
-    dayStudy: 'Monday',
-    startTime: '08:00',
-    endTime: '10:00',
-    timeDetail: '2 hours',
-    totalStudentInClass: 30
-  },
-  {
-    className: 'History',
-    classroomName: 'B201',
-    dayStudy: 'Wednesday',
-    startTime: '09:00',
-    endTime: '11:00',
-    timeDetail: '2 hours',
-    totalStudentInClass: 25
-  },
-  {
-    className: 'English',
-    classroomName: 'C301',
-    dayStudy: 'Friday',
-    startTime: '08:00',
-    endTime: '10:00',
-    timeDetail: '2 hours',
-    totalStudentInClass: 35
-  },
-  {
-    className: 'Physics',
-    classroomName: 'D401',
-    dayStudy: 'Tuesday',
-    startTime: '13:00',
-    endTime: '15:00',
-    timeDetail: '2 hours',
-    totalStudentInClass: 28
-  },
-  {
-    className: 'Chemistry',
-    classroomName: 'E501',
-    dayStudy: 'Thursday',
-    startTime: '14:00',
-    endTime: '16:00',
-    timeDetail: '2 hours',
-    totalStudentInClass: 32
-  },
-  {
-    className: 'Biology',
-    classroomName: 'F601',
-    dayStudy: 'Monday',
-    startTime: '15:00',
-    endTime: '17:00',
-    timeDetail: '2 hours',
-    totalStudentInClass: 29
-  },
-  {
-    className: 'Geography',
-    classroomName: 'G701',
-    dayStudy: 'Wednesday',
-    startTime: '16:00',
-    endTime: '18:00',
-    timeDetail: '2 hours',
-    totalStudentInClass: 27
-  },
-  {
-    className: 'Literature',
-    classroomName: 'H801',
-    dayStudy: 'Friday',
-    startTime: '17:00',
-    endTime: '19:00',
-    timeDetail: '2 hours',
-    totalStudentInClass: 31
-  },
-  {
-    className: 'Music',
-    classroomName: 'I901',
-    dayStudy: 'Tuesday',
-    startTime: '18:00',
-    endTime: '20:00',
-    timeDetail: '2 hours',
-    totalStudentInClass: 26
-  },
-  {
-    className: 'Art',
-    classroomName: 'J1001',
-    dayStudy: 'Monday;Thursday',
-    startTime: '19:00',
-    endTime: '21:00',
-    timeDetail: '2 hours',
-    totalStudentInClass: 33
-  }
-]
+// const data: ScheduleModel[] = [
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '12-03-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '15-03-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '19-03-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '22-03-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '26-03-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '29-03-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '02-04-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '05-04-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '09-04-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '12-04-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '16-04-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '19-04-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   },
+//   {
+//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
+//     subjectName: 'Introduction C# OOP',
+//     timeStart: '19:00:00',
+//     timeEnd: '22:00:00',
+//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
+//     teacherName: 'Nguyen Phuong LyLy',
+//     dateLearn: '23-04-2024',
+//     slotRemaining: 13,
+//     slotAttendanceStatus: 'Not yet'
+//   }
+// ]
 
-//export interface IWareHouseTableProps {}
+export interface ScheduleModel {
+  subjectId: string
+  subjectName: string
+  timeStart: string
+  timeEnd: string
+  teacherId: string
+  teacherName: string
+  dateLearn: string
+  slotRemaining: number
+  slotAttendanceStatus: string
+}
+
+type MapDateScheduleModel = {
+  [key: string]: ScheduleModel[]
+}
 
 const range = (start: number, end: number, step: number) => {
   return Array.from(Array.from(Array(Math.ceil((end - start) / step)).keys()), x => start + x * step)
 }
 
 const list = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-const timeLst = range(7, 22, 1)
+const timeLst = range(7, 24, 1)
 const heightOfASlot = 50
 const widthOfASlot = 150
 
-const Slot = ({ data }: { data: Subject }) => {
+const Slot = ({ data }: { data: ScheduleModel }) => {
+  // const [idToken, setIdToken] = useState<string>('')
   return (
-    <Tooltip title={data.timeDetail}>
+    <Tooltip title={data.subjectName}>
       <Card
         sx={{
           padding: '5px',
@@ -141,12 +210,18 @@ const Slot = ({ data }: { data: Subject }) => {
 
           // top: heightOfASlot * 1 + 1 * 1 - 1 + 2 + 'px',
           // left: widthOfASlot * 1 + 3 * 1 - 70 + 'px',
-          top: widthOfASlot * 0.5 + 0.5 + 'px',
+          top: (moment(data.timeStart, 'HH:mm:ss').get('minute') / 60) * widthOfASlot + 'px',
           left: '0.5px',
+          right: '0.5px',
           backgroundColor: '#b39bde',
-          zIndex: 999999,
-          width: widthOfASlot + 5,
-          height: heightOfASlot * 2 - 2,
+          zIndex: 1,
+          height:
+            (moment(data.timeEnd, 'HH:mm:ss').get('hour') -
+              moment(data.timeStart, 'HH:mm:ss').get('hour') +
+              (moment(data.timeEnd, 'HH:mm:ss').get('minute') - moment(data.timeStart, 'HH:mm:ss').get('minute')) /
+                60) *
+              heightOfASlot -
+            2,
           borderRadius: 0,
           ':hover': {
             cursor: 'pointer'
@@ -156,11 +231,11 @@ const Slot = ({ data }: { data: Subject }) => {
         <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} height={'100%'}>
           <Box display={'flex'} flexDirection={'column'}>
             <Typography fontWeight={600} color={'white'}>
-              {data.className}
+              {data.subjectName}
             </Typography>
           </Box>
-          <Typography color={'white'} textAlign={'right'}>
-            {data.startTime} - {data.endTime}
+          <Typography color={'white'} textAlign={'right'} variant='body2'>
+            {moment(data.timeStart, 'HH:mm:ss').format('HH:mm')} - {moment(data.timeEnd, 'HH:mm:ss').format('HH:mm')}
           </Typography>
         </Box>
       </Card>
@@ -170,6 +245,38 @@ const Slot = ({ data }: { data: Subject }) => {
 
 export default function WareHouseTable() {
   const [next, setNext] = useState<number>(0)
+  const [mapSchedules, setMapSchedules] = useState<MapDateScheduleModel>({})
+
+  const axios = useAxios()
+
+  //Get Schedule
+  useEffect(() => {
+    const handleGetSchedule = async () => {
+      try {
+        const response = await axios.call(
+          'get',
+          '/api/v1/student/get-schedule-of-student-by-student-id?StudentId=74118244-94b9-466f-9e50-57f3d3733612'
+        )
+        console.log(response)
+
+        const list = response as ScheduleModel[]
+        const map: MapDateScheduleModel = {}
+        list.map(schedule => {
+          if (map[schedule.dateLearn]) {
+            map[schedule.dateLearn].push(schedule)
+          } else {
+            map[schedule.dateLearn] = [schedule]
+          }
+        })
+
+        setMapSchedules(map)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    handleGetSchedule()
+  }, [])
 
   useEffect(() => {
     const parent = document.getElementById('slot_time_14')
@@ -289,7 +396,10 @@ export default function WareHouseTable() {
                           color: theme => theme.palette.primary[theme.palette.mode]
                         }}
                       >
-                        {moment().startOf('week').add('day', i).format('DD/MM')}
+                        {moment()
+                          .startOf('week')
+                          .add('day', i + next * 7)
+                          .format('DD/MM')}
                       </Typography>
                     </TableCell>
                   )
@@ -332,7 +442,7 @@ export default function WareHouseTable() {
                         }
                       />
                     </TableCell>
-                    {list.map(day => {
+                    {list.map((day, index) => {
                       return (
                         <TableCell
                           key={day}
@@ -355,10 +465,20 @@ export default function WareHouseTable() {
                           //       '<div class="slot MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-tckmah-MuiPaper-root-MuiCard-root" style="position:absolute !important;top: 0.5px;left:0.8px"><div class="MuiBox-root css-1129bf7" ></div><div class="MuiBox-root css-j7qwjs"><p class="MuiTypography-root MuiTypography-body1 css-1tpsv8u-MuiTypography-root">Tên Môn</p><span class="MuiTypography-root MuiTypography-caption css-1gtrqkn-MuiTypography-root">SL HS bfsbug</span></div><p class="MuiTypography-root MuiTypography-body1 css-2rtyd8-MuiTypography-root">Thời gian</p></div>'
                           // }}
                         >
-                          {subjects.map((subject, index) => {
-                            if (!subject.dayStudy.includes(day)) return
+                          {/* {schedules.map((subject, index) => {
+                            if (!subject.dateLearn.includes(day)) return
 
-                            if (moment(subject.startTime, 'HH:mm').get('hour') !== time) return
+                            if (moment(subject.timeStart, 'HH:mm:ss').get('hour') !== time) return
+
+                            return <Slot key={index} data={subject} />
+                          })} */}
+                          {mapSchedules[
+                            moment()
+                              .startOf('week')
+                              .add('day', index + next * 7)
+                              .format('DD-MM-YYYY')
+                          ]?.map((subject, index) => {
+                            if (moment(subject.timeStart, 'HH:mm:ss').get('hour') !== time) return
 
                             return <Slot key={index} data={subject} />
                           })}

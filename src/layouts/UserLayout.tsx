@@ -19,6 +19,11 @@ import VerticalAppBarContent from './components/vertical/AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
+import useAuth from 'src/@core/hooks/useAuth'
+import { VerticalNavItemsType } from 'src/@core/layouts/types'
+import navigationAdmin from 'src/navigation/vertical/AdminNavigation'
+import TeacherNavigation from 'src/navigation/vertical/TeacherNavigation'
+import StudentNavigation from 'src/navigation/vertical/StudentNavigation'
 
 interface Props {
   children: ReactNode
@@ -27,6 +32,8 @@ interface Props {
 const UserLayout = ({ children }: Props) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings()
+  const authentication = useAuth()
+  const role = authentication.role
 
   /**
    *  The below variable will hide the current layout menu at given screen size.
@@ -52,12 +59,20 @@ const UserLayout = ({ children }: Props) => {
     )
   }
 
+  const getVerticalNavItems = (): VerticalNavItemsType => {
+    if (role === 'Admin') return navigationAdmin()
+    if (role === 'Teacher') return TeacherNavigation()
+    if (role === 'Student') return StudentNavigation()
+
+    return VerticalNavItems()
+  }
+
   return (
     <VerticalLayout
       hidden={hidden}
       settings={settings}
       saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems()} // Navigation Items
+      verticalNavItems={getVerticalNavItems()} // Navigation Items
       afterVerticalNavMenuContent={UpgradeToProImg}
       verticalAppBarContent={(
         props // AppBar Content

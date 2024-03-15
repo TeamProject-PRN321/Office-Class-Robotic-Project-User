@@ -87,7 +87,6 @@ const TabAccount = () => {
               </Box>
             </Box>
           </Grid>
-
           <Grid item xs={12} sm={6}>
             <TextField disabled fullWidth label='Username' placeholder='ttqa0508' defaultValue='ttqa0508' />
           </Grid>
@@ -103,18 +102,17 @@ const TabAccount = () => {
               defaultValue='ttqa0508@gmail.com'
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          {/* <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Role</InputLabel>
               <Select label='Role' defaultValue='admin'>
                 <MenuItem value='admin'>Admin</MenuItem>
-                <MenuItem value='author'>Staff</MenuItem>
-                <MenuItem value='editor'>Professor</MenuItem>
+                <MenuItem value='editor'>Teacher</MenuItem>
                 <MenuItem value='maintainer'>Student</MenuItem>
                 <MenuItem value='subscriber'>Parent</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
@@ -125,10 +123,10 @@ const TabAccount = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          r
+          {/* <Grid item xs={12} sm={6}>
             <TextField fullWidth label='Company' placeholder='ABC Pvt. Ltd.' defaultValue='ABC Pvt. Ltd.' />
-          </Grid>
-
+          </Grid> */}
           {openAlert ? (
             <Grid item xs={12} sx={{ mb: 3 }}>
               <Alert
@@ -147,7 +145,6 @@ const TabAccount = () => {
               </Alert>
             </Grid>
           ) : null}
-
           <Grid item xs={12}>
             <Button variant='contained' sx={{ marginRight: 3.5 }}>
               Save Changes

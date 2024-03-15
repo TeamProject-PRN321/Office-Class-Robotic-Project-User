@@ -1,5 +1,7 @@
 'use client'
 
+import 'react-datepicker/dist/react-datepicker.css'
+
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'

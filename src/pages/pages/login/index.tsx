@@ -92,7 +92,6 @@ const LoginPage = () => {
 
   //Process Login
   const ProceesLogin = async () => {
-    console.log(values)
     try {
       const apiLogin = await auth.login({
         username: values.username,
