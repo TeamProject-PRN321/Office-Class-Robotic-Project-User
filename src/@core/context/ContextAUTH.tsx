@@ -100,10 +100,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           }
         } as UserLoginContextModel)
 
-        const decodeToken = jwtDecode(token)
-        console.log(decodeToken)
-        setRole((decodeToken as JwtDecodeModel).role)
-        setUid((decodeToken as JwtDecodeModel).Id)
+        try {
+          const decodeToken = jwtDecode(token)
+          console.log(decodeToken)
+
+          setRole((decodeToken as JwtDecodeModel).role)
+          setUid((decodeToken as JwtDecodeModel).Id)
+        } catch (error) {
+          console.log('Invalid token: ' + error)
+        }
       } else {
         if (!token) logout()
       }
@@ -134,12 +139,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       })
 
-      localStorage.setItem('ACCESS_TOKEN', JSON.stringify(response.accessToken))
+      //localStorage.setItem('ACCESS_TOKEN', JSON.stringify(response.accessToken))
 
-      const decodeToken = jwtDecode(response.accessToken)
-      console.log(decodeToken)
-      setRole((decodeToken as JwtDecodeModel).role)
-      setUid((decodeToken as JwtDecodeModel).Id)
+      try {
+        const decodeToken = jwtDecode(response.accessToken)
+        console.log(decodeToken)
+
+        setRole((decodeToken as JwtDecodeModel).role)
+        setUid((decodeToken as JwtDecodeModel).Id)
+      } catch (error) {
+        console.log('Invalid token: ' + error)
+      }
 
       return Promise.resolve(true)
     } catch (error) {
