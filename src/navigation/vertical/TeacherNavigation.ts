@@ -7,11 +7,11 @@ import { SchoolOutline } from 'mdi-material-ui'
 
 const TeacherNavigation = (): VerticalNavItemsType => {
   return [
-    {
-      title: 'Dashboard',
-      icon: HomeOutline,
-      path: '/'
-    },
+    // {
+    //   title: 'Dashboard',
+    //   icon: HomeOutline,
+    //   path: '/'
+    // },
     {
       title: 'Class',
       icon: SchoolOutline,
@@ -19,6 +19,11 @@ const TeacherNavigation = (): VerticalNavItemsType => {
     },
     {
       sectionTitle: 'Setting'
+    },
+    {
+      title: 'Account',
+      icon: SchoolOutline,
+      path: '/account-settings'
     }
   ]
 }

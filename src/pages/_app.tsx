@@ -94,8 +94,8 @@ const App = (props: ExtendedAppProps) => {
         }}
       />
 
-      <AuthProvider>
-        <AxiosProvider>
+      <AxiosProvider>
+        <AuthProvider>
           <SettingsProvider>
             <SettingsConsumer>
               {({ settings }) => {
@@ -103,8 +103,8 @@ const App = (props: ExtendedAppProps) => {
               }}
             </SettingsConsumer>
           </SettingsProvider>
-        </AxiosProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </AxiosProvider>
     </CacheProvider>
   )
 }

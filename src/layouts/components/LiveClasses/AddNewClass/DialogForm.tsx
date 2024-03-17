@@ -28,7 +28,6 @@ import { useEffect } from 'react'
 import { NewClassModel } from './NewClassFormLiveClass'
 import { StudentListID } from 'src/pages/classes'
 import { toast } from 'react-toastify'
-import useAuth from 'src/@core/hooks/useAuth'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -302,27 +301,7 @@ export default function DialogForm() {
               )
             }}
           />
-          {/* <TextField
-            id='outlined-select-currency'
-            select
-            label='Select'
-            value={dayStudied}
-            onChange={e => {
-              setdayStudied(e.target.value)
-            }}
-            defaultValue='Thứ 2 - Thứ 5'
-            helperText='Please select day study'
-            sx={{
-              m: 2,
-              width: '600px'
-            }}
-          >
-            {dayStudys.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField> */}
+
           <Box
             sx={{
               m: 2,

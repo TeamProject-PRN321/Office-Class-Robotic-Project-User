@@ -5,6 +5,7 @@ import HomeOutline from 'mdi-material-ui/HomeOutline'
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
 import { HumanMaleBoard, Laptop, SchoolOutline } from 'mdi-material-ui'
+import { Schedule } from '@mui/icons-material'
 
 const navigationAdmin = (): VerticalNavItemsType => {
   return [
@@ -21,12 +22,18 @@ const navigationAdmin = (): VerticalNavItemsType => {
     {
       title: 'Schedule',
       icon: CubeOutline,
-      path: '/subjects'
+      path: '/schedule'
     },
     {
       title: 'Professor',
       icon: HumanMaleBoard,
       path: '/teachers'
+    },
+
+    {
+      title: 'Subject',
+      icon: Schedule,
+      path: '/subjects'
     },
     {
       title: 'Device',
@@ -35,6 +42,11 @@ const navigationAdmin = (): VerticalNavItemsType => {
     },
     {
       sectionTitle: 'Setting'
+    },
+    {
+      title: 'Account',
+      icon: SchoolOutline,
+      path: '/account-settings'
     }
   ]
 }

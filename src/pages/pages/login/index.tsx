@@ -193,6 +193,7 @@ const LoginPage = () => {
               onChange={handleChange('username')}
               autoFocus
               fullWidth
+              autoSave=''
               id='username'
               label='Username'
               sx={{ marginBottom: 4 }}
