@@ -1,15 +1,13 @@
 import * as React from 'react'
 
-import { Box, Button, Card, Typography } from '@mui/material'
+import { Box, Button, Card, Dialog, DialogContent, DialogTitle, Slide, Typography } from '@mui/material'
 import { Calendar, ClockOutline } from 'mdi-material-ui'
-
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
-import Slide from '@mui/material/Slide'
+import { ClassModel } from './AddNewClass/NewClassFormLiveClass'
 import { TransitionProps } from '@mui/material/transitions'
+
+interface HistoryClassesReportProps {
+  data: ClassModel
+}
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -20,7 +18,7 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction='up' ref={ref} {...props} />
 })
 
-export default function HistoryClassesReport() {
+export default function HistoryClassesReport({ data }: HistoryClassesReportProps) {
   //const route = useRouter()
   // const ViewDetailLiveClass = () => {
   //   route.push('/classes')
@@ -38,8 +36,8 @@ export default function HistoryClassesReport() {
 
   return (
     <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column' }}>
-      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>How to Make an Array and it's Type in C#</Typography>
-      <Typography
+      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>{data.className}</Typography>
+      {/* <Typography
         sx={{
           border: '1px solid #B0AAAE',
           borderRadius: '10px',
@@ -50,12 +48,12 @@ export default function HistoryClassesReport() {
         }}
       >
         Teacher: Ngô Thị Hương
-      </Typography>
+      </Typography> */}
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <ClockOutline></ClockOutline>
-        <Typography sx={{ marginRight: '15px' }}>12:40 P:M</Typography>
+        <Typography sx={{ marginRight: '15px' }}>{data.startTime}</Typography>
         <Calendar></Calendar>
-        <Typography>05/08/2001</Typography>
+        <Typography>{data.dayStudy}</Typography>
       </Box>
       <Typography
         sx={{
@@ -69,7 +67,7 @@ export default function HistoryClassesReport() {
           color: '#D8E4EA'
         }}
       >
-        Status: Completed
+        Status: {!data.classWasCheckedAttendant ? 'Completed' : 'Waiting'}
       </Typography>
       <Button
         sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}

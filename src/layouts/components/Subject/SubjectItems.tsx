@@ -50,7 +50,7 @@ export default function SubjectItems() {
         width={'100%'}
         alignItems={'center'}
       >
-        <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}>Schedules</Typography>
+        <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}>Subject</Typography>
         <React.Fragment>
           <Button
             sx={{

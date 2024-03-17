@@ -2,16 +2,21 @@ import { Box, Button, Card, Typography } from '@mui/material'
 import { Calendar, ClockOutline } from 'mdi-material-ui'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+import { ClassModel } from './AddNewClass/NewClassFormLiveClass'
 
-export default function LiveClassItems() {
+interface LiveClassItemsProps {
+  data: ClassModel
+}
+
+export default function LiveClassItems({ data }: LiveClassItemsProps) {
   const route = useRouter()
   const ViewDetailLiveClass = () => {
     route.push('/classes')
   }
 
   return (
-    <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column' }}>
-      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>How to Make an Array and it's Type in C#</Typography>
+    <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column', width: '100%' }}>
+      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>{data.className}</Typography>
       <Typography
         sx={{
           border: '1px solid #B0AAAE',

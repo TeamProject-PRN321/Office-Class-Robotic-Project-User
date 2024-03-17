@@ -29,7 +29,6 @@ const navigationAdmin = (): VerticalNavItemsType => {
       icon: HumanMaleBoard,
       path: '/teachers'
     },
-
     {
       title: 'Subject',
       icon: Schedule,

@@ -1,19 +1,77 @@
 import { Box, Button, Card, Drawer, Typography } from '@mui/material'
 import { Calendar, ClockOutline } from 'mdi-material-ui'
+import moment from 'moment'
 import * as React from 'react'
+import useAxios from 'src/@core/hooks/useAxios'
+import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+import { ClassModel } from './AddNewClass/NewClassFormLiveClass'
 import AttendanceReportDrawer from './AttendanceRoport/AttendanceReportDrawer'
 
-export default function HistoryClasses() {
-  const [state, setState] = React.useState(false)
+interface HistoryClassesProps {
+  data: ClassModel
+}
+export interface StudentModel {
+  dateStudy: string
+  className: string
+  startTime: string
+  endTime: string
+  studentName: string
+  studentId: string
+  attendanceStatus: number
+  attendanceId: string
+}
 
-  const toggleDrawer = () => {
+const URL_GET_STUDENT_OF_CLASSES = '/api/v1/attendances'
+
+export default function HistoryClasses({ data }: HistoryClassesProps) {
+  const [state, setState] = React.useState(false)
+  const [studentList, setStudentList] = React.useState<StudentModel[]>([])
+  const axiosClient = useAxios()
+
+  const isAbletoCheckAttendance: boolean = data.classWasCheckedAttendant
+
+  const toggleDrawer = async () => {
+    await fetchDataStudent()
     setState(!state)
   }
 
+  const fetchDataStudent = async () => {
+    try {
+      const response = await axiosClient.call(
+        'get',
+        URL_GET_STUDENT_OF_CLASSES +
+          '/' +
+          data.className +
+          '/' +
+          moment(data.dayStudy, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+        null,
+        true
+      )
+
+      setStudentList(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleCheckAttendance = (studentId: string) => {
+    const studentIndex = studentList.findIndex(x => x.studentId === studentId)
+    if (studentIndex < 0) {
+      console.log('Không tìm thấy studentId ' + studentId)
+
+      return
+    }
+
+    const newLst = [...studentList]
+    const newStudent = newLst[studentIndex]
+    newStudent.attendanceStatus = newStudent.attendanceStatus === 0 ? 1 : 0
+    setStudentList([...newLst])
+  }
+
   return (
-    <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column' }}>
-      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>How to Make an Array and it's Type in C#</Typography>
-      <Typography
+    <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column', width: '100%' }}>
+      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>{data.className}</Typography>
+      {/* <Typography
         sx={{
           border: '1px solid #B0AAAE',
           borderRadius: '10px',
@@ -24,12 +82,12 @@ export default function HistoryClasses() {
         }}
       >
         Teacher: Ngô Thị Hương
-      </Typography>
+      </Typography> */}
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <ClockOutline></ClockOutline>
-        <Typography sx={{ marginRight: '15px' }}>12:40 P:M</Typography>
+        <Typography sx={{ marginRight: '15px' }}>{moment(data.startTime, 'HH:mm:ss').format('HH:mm')}</Typography>
         <Calendar></Calendar>
-        <Typography>05/08/2001</Typography>
+        <Typography>{data.dayStudy}</Typography>
       </Box>
       <Typography
         sx={{
@@ -39,25 +97,40 @@ export default function HistoryClasses() {
           padding: '5px',
           fontSize: '14px',
           fontWeight: 'bold',
-          backgroundColor: '#C4FCEF',
-          color: '#00C9A7'
+          backgroundColor: theme =>
+            data.classWasCheckedAttendant ? '#C4FCEF' : hexToRGBA(theme.palette.info.light, 0.2),
+          color: theme => (data.classWasCheckedAttendant ? '#00C9A7' : theme.palette.info.light)
         }}
       >
-        Status: Completed
+        Status: {data.classWasCheckedAttendant ? 'Completed' : 'Waiting'}
       </Typography>
 
       <Button
-        sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
+        variant='contained'
+        sx={{
+          ':hover': {
+            backgroundColor: '#008BC5',
+            color: 'white'
+          },
+          ':disabled': {
+            cursor: 'not-allowed'
+          }
+        }}
         onClick={() => {
           toggleDrawer()
         }}
+        disabled={isAbletoCheckAttendance || moment().format('DD-MM-YYYY') !== data.dayStudy}
       >
-        Attendance
+        Check Attendance
       </Button>
 
       {/* Show drawer attendance */}
       <Drawer anchor={'right'} open={state} onClose={toggleDrawer} sx={{}}>
-        <AttendanceReportDrawer></AttendanceReportDrawer>
+        <AttendanceReportDrawer
+          classData={data}
+          studentList={studentList}
+          handleCheckAttendance={handleCheckAttendance}
+        />
       </Drawer>
     </Card>
   )

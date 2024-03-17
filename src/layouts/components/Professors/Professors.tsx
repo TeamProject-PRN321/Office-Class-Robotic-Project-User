@@ -1,9 +1,15 @@
 import { Box, Button, Card, Typography } from '@mui/material'
-import { BookmarkCheckOutline, SchoolOutline } from 'mdi-material-ui'
+import { BookmarkCheckOutline } from 'mdi-material-ui'
+import moment from 'moment'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+import { TeacherModel } from 'src/pages/teachers'
 
-export default function ProfessorItems() {
+interface ProfessorItemsProps {
+  teacherModel: TeacherModel
+}
+
+export default function ProfessorItems({ teacherModel }: ProfessorItemsProps) {
   const route = useRouter()
   const ViewDetailProfessor = () => {
     route.push('/teachers')
@@ -11,7 +17,7 @@ export default function ProfessorItems() {
 
   return (
     <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column', width: '350px', height: '200px' }}>
-      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>Trần Duy Thanh</Typography>
+      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>{teacherModel.name}</Typography>
       <Typography
         sx={{
           border: '1px solid #B0AAAE',
@@ -23,13 +29,13 @@ export default function ProfessorItems() {
           color: '#43E45B'
         }}
       >
-        Added at: January 1, 2024
+        Ngày sinh: {moment(teacherModel.birthday).format('DD-MM-YYYY')}
       </Typography>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <SchoolOutline sx={{ marginRight: '3px' }}></SchoolOutline>
-        <Typography sx={{ marginRight: '15px' }}>3: Class</Typography>
+        {/* <SchoolOutline sx={{ marginRight: '3px' }}></SchoolOutline>
+        <Typography sx={{ marginRight: '15px' }}>3: Class</Typography> */}
+        <Typography>{teacherModel.listSubjectOfTeacher.length}Course : </Typography>
         <BookmarkCheckOutline sx={{ marginRight: '3px' }}></BookmarkCheckOutline>
-        <Typography>1: Course</Typography>
       </Box>
 
       <Button

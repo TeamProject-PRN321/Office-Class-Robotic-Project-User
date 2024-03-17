@@ -64,19 +64,19 @@ export const AxiosProvider = ({ children }: { children: ReactNode }) => {
       }
 
       if (method === 'post') {
-        const response = await axiosClient.post(url, { ...data })
+        const response = await axiosClient.post(url, data)
 
         return response.data
       }
 
       if (method === 'patch') {
-        const response = await axiosClient.patch(url, { ...data })
+        const response = await axiosClient.patch(url, data)
 
         return response.data
       }
 
       if (method === 'put') {
-        const response = await axiosClient.put(url, { ...data })
+        const response = await axiosClient.put(url, data)
 
         return response.data
       }

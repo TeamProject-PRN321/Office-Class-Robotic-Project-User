@@ -7,7 +7,7 @@ import * as React from 'react'
 
 import { ArrowTopRight } from 'mdi-material-ui'
 
-import { SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Tab from '@mui/material/Tab'
@@ -18,14 +18,47 @@ import TabContext from '@mui/lab/TabContext'
 import CardContent from '@mui/material/CardContent'
 import ProfessorItems from 'src/layouts/components/Professors/Professors'
 import ProfessorReport from 'src/layouts/components/Professors/ProfessorsReport'
+import useAxios from 'src/@core/hooks/useAxios'
+
+export interface TeacherModel {
+  teacherId: string
+  name: string
+  birthday: string
+  address: string
+  gender: string
+  phoneNumber: string
+  listSubjectOfTeacher: ListSubjectOfTeacher[]
+}
+
+export interface ListSubjectOfTeacher {
+  subjectId: string
+  subjectName: string
+}
+
+const URL_GET_TEACHERS = '/api/v1/teacher'
 
 export default function App() {
   // ** State
   const [value, setValue] = useState<string>('1')
+  const [teachers, setTeachers] = useState<TeacherModel[]>([] as TeacherModel[])
+  const axiosClient = useAxios()
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }
+
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        const response = await axiosClient.call('get', URL_GET_TEACHERS)
+        setTeachers(response as TeacherModel[])
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchTeachers()
+  }, [])
 
   return (
     <Card>
@@ -63,27 +96,13 @@ export default function App() {
                   Contact
                 </Button>
               </Grid>
-              <Grid item>
-                <ProfessorItems></ProfessorItems>
-              </Grid>
-              <Grid item>
-                <ProfessorItems></ProfessorItems>
-              </Grid>
-              <Grid item>
-                <ProfessorItems></ProfessorItems>
-              </Grid>
-              <Grid item>
-                <ProfessorItems></ProfessorItems>
-              </Grid>
-              <Grid item>
-                <ProfessorItems></ProfessorItems>
-              </Grid>
-              <Grid item>
-                <ProfessorItems></ProfessorItems>
-              </Grid>
-              <Grid item>
-                <ProfessorItems></ProfessorItems>
-              </Grid>
+              {teachers.map(item => {
+                return (
+                  <Grid item key={item.teacherId}>
+                    <ProfessorItems teacherModel={item}></ProfessorItems>
+                  </Grid>
+                )
+              })}
             </Grid>
           </TabPanel>
 

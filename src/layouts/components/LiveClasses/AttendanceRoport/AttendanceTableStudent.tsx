@@ -11,7 +11,7 @@ import {
   tableCellClasses
 } from '@mui/material'
 import * as React from 'react'
-import { Student } from './AttendanceReportDrawer'
+import { StudentModel } from '../HistoryClasses'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -38,29 +38,26 @@ const RowData = ({
   data,
   handleCheckAttendance
 }: {
-  data: Student
+  data: StudentModel
   handleCheckAttendance: (studentId: string) => void
 }) => {
   return (
-    <StyledTableRow key={data.StudentID}>
-      <StyledTableCell component='th' scope='row'>
-        {data.StudentID}
-      </StyledTableCell>
-      <StyledTableCell align='left'>{data.StudentName}</StyledTableCell>
-      <StyledTableCell align='center'>{data.Class}</StyledTableCell>
+    <StyledTableRow key={data.studentId}>
+      <StyledTableCell align='left'>{data.studentName}</StyledTableCell>
+      <StyledTableCell align='center'>{data.className}</StyledTableCell>
       <StyledTableCell align='center'>
         <Button
           sx={{
             width: '100px',
-            backgroundColor: data.isAttendance ? 'green' : '#FF8066',
+            backgroundColor: data.attendanceStatus === 1 ? 'green' : '#FF8066',
             color: '#E0F4FD !important',
-            ':hover': { backgroundColor: data.isAttendance ? 'green' : '#FF8066', color: '#E0F4FD' }
+            ':hover': { backgroundColor: data.attendanceStatus === 1 ? 'green' : '#FF8066', color: '#E0F4FD' }
           }}
           onClick={() => {
-            handleCheckAttendance(data.StudentID)
+            handleCheckAttendance(data.studentId)
           }}
         >
-          {data.isAttendance ? 'Present' : 'Absent'}
+          {data.attendanceStatus === 1 ? 'Present' : 'Absent'}
         </Button>
       </StyledTableCell>
     </StyledTableRow>
@@ -71,7 +68,7 @@ export default function AttendanceTableStudent({
   students,
   handleCheckAttendance
 }: {
-  students: Student[]
+  students: StudentModel[]
   handleCheckAttendance: (studentId: string) => void
 }) {
   return (
@@ -79,7 +76,6 @@ export default function AttendanceTableStudent({
       <Table sx={{ minWidth: 700 }} aria-label='customized table'>
         <TableHead>
           <TableRow>
-            <StyledTableCell>Student ID</StyledTableCell>
             <StyledTableCell align='left'>Student Name</StyledTableCell>
             <StyledTableCell align='center'>Class</StyledTableCell>
             <StyledTableCell align='center'>Attendance</StyledTableCell>
@@ -87,7 +83,7 @@ export default function AttendanceTableStudent({
         </TableHead>
         <TableBody>
           {students.map(row => (
-            <RowData key={row.StudentID} data={row} handleCheckAttendance={handleCheckAttendance} />
+            <RowData key={row.studentId} data={row} handleCheckAttendance={handleCheckAttendance} />
           ))}
         </TableBody>
       </Table>

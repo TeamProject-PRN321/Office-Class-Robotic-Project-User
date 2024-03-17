@@ -78,27 +78,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       jsonString && localStorage.setItem('ACCOUNT', jsonString)
       const dataUser = jsonString ? (JSON.parse(jsonString) as UserLoginContextModel) : initialAuth
       const token = localStorage.getItem('ACCESS_TOKEN') || ''
+      console.log({ token, dataUser, jsonString })
 
-      if (jsonString) {
-        if (!token) {
-          login({
-            username: dataUser.user.username,
-            password: dataUser.user.password
-          })
-        } else {
-          if (router.pathname.includes('/login')) {
-            router.push('/')
-          }
+      if (!token) {
+        login({
+          username: dataUser.user.username,
+          password: dataUser.user.password
+        })
+      } else {
+        if (router.pathname.includes('/login')) {
+          router.push('/')
         }
-
-        setUserLogin({
-          ...userLogin,
-          user: {
-            ...userLogin.user,
-            ...dataUser,
-            accessToken: token
-          }
-        } as UserLoginContextModel)
 
         try {
           const decodeToken = jwtDecode(token)
@@ -109,6 +99,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } catch (error) {
           console.log('Invalid token: ' + error)
         }
+      }
+
+      if (jsonString) {
+        setUserLogin({
+          ...userLogin,
+          user: {
+            ...userLogin.user,
+            ...dataUser,
+            accessToken: token
+          }
+        } as UserLoginContextModel)
       } else {
         if (!token) logout()
       }
@@ -129,6 +130,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (data: LoginModel) => {
     try {
       const response = await call('post', '/Account/login', data, true)
+      console.log(response)
+
       handleRememberUserInfo(data)
       setUserLogin({
         ...userLogin,
@@ -139,19 +142,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       })
 
-      //localStorage.setItem('ACCESS_TOKEN', JSON.stringify(response.accessToken))
-
       try {
-        const decodeToken = jwtDecode(response.accessToken)
-        console.log(decodeToken)
+        const decodeToken = jwtDecode(response?.accessToken)
+        localStorage.setItem('ACCESS_TOKEN', JSON.stringify(response.accessToken))
 
         setRole((decodeToken as JwtDecodeModel).role)
         setUid((decodeToken as JwtDecodeModel).Id)
       } catch (error) {
         console.log('Invalid token: ' + error)
+
+        throw error
       }
 
-      return Promise.resolve(true)
+      return Promise.resolve(response)
     } catch (error) {
       console.log(error)
 

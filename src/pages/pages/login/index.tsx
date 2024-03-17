@@ -39,6 +39,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 import useAuth from 'src/@core/hooks/useAuth'
+import { toast } from 'react-toastify'
 
 interface State {
   username: string
@@ -91,15 +92,20 @@ const LoginPage = () => {
   }
 
   //Process Login
-  const ProceesLogin = async () => {
+  const ProceesLogin = () => {
     try {
-      const apiLogin = await auth.login({
-        username: values.username,
-        password: values.password
-      })
-      if (apiLogin) {
-        router.push('/')
-      }
+      auth
+        .login({
+          username: values.username,
+          password: values.password
+        })
+        .then(apiLogin => {
+          if (!!apiLogin) {
+            router.push('/')
+          } else {
+            toast.error('Đăng nhập không thành công.')
+          }
+        })
     } catch (error) {
       console.log(error)
     }
