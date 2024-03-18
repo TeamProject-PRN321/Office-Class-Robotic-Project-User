@@ -25,6 +25,7 @@ export interface NewClassModel {
   dateStartClass: string
   subjectId: string
   AppUserId: string
+  teacherId: string
   classRoomID: string
 }
 

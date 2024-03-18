@@ -30,7 +30,7 @@ export default function App() {
       <TabContext value={value}>
         <TabList onChange={handleChange} aria-label='card navigation example'>
           <Tab sx={{ fontWeight: 'bold' }} value='1' label='Live Class' />
-          <Tab sx={{ fontWeight: 'bold' }} value='2' label='Class History' />
+          <Tab sx={{ fontWeight: 'bold' }} value='2' label='Attendance Class' />
         </TabList>
         <CardContent>
           <TabPanel value='1' sx={{ p: 0 }}>

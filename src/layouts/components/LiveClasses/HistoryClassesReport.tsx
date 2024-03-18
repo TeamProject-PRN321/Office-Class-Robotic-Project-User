@@ -4,6 +4,7 @@ import { Box, Button, Card, Dialog, DialogContent, DialogTitle, Slide, Typograph
 import { Calendar, ClockOutline } from 'mdi-material-ui'
 import { ClassModel } from './AddNewClass/NewClassFormLiveClass'
 import { TransitionProps } from '@mui/material/transitions'
+import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
 interface HistoryClassesReportProps {
   data: ClassModel
@@ -63,11 +64,12 @@ export default function HistoryClassesReport({ data }: HistoryClassesReportProps
           padding: '5px',
           fontSize: '14px',
           fontWeight: 'bold',
-          backgroundColor: '#4B4453',
-          color: '#D8E4EA'
+          backgroundColor: theme =>
+            data.classWasCheckedAttendant ? '#C4FCEF' : hexToRGBA(theme.palette.info.light, 0.2),
+          color: theme => (data.classWasCheckedAttendant ? '#00C9A7' : theme.palette.info.light)
         }}
       >
-        Status: {!data.classWasCheckedAttendant ? 'Completed' : 'Waiting'}
+        Status: {data.classWasCheckedAttendant ? 'Completed' : 'Waiting'}
       </Typography>
       <Button
         sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}

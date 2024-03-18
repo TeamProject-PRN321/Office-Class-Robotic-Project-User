@@ -82,7 +82,7 @@ export default function AttendanceReportDrawer({
       const response = await axiosClient.call('post', API_CHECK_ATTENDANCE, payload)
 
       console.log(response)
-      toast.success('Check attendence successfully!!!')
+      toast.success('Check attendance successfully !!!')
     } catch (error) {
       console.log(error)
     }

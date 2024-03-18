@@ -11,7 +11,7 @@ interface LiveClassItemsProps {
 export default function LiveClassItems({ data }: LiveClassItemsProps) {
   const route = useRouter()
   const ViewDetailLiveClass = () => {
-    route.push('/classes')
+    route.push('/students')
   }
 
   return (
@@ -56,6 +56,14 @@ export default function LiveClassItems({ data }: LiveClassItemsProps) {
         }}
       >
         John now
+      </Button>
+      <Button
+        sx={{ backgroundColor: '#5972F3', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
+        onClick={() => {
+          ViewDetailLiveClass()
+        }}
+      >
+        Students in class
       </Button>
     </Card>
   )

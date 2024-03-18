@@ -68,7 +68,8 @@
     "react-dom": "^18.2.0",
     "react-perfect-scrollbar": "^1.5.8",
     "react-popper": "^2.2.5",
-    "react-toastify": "^10.0.4"
+    "react-toastify": "^10.0.4",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "16.11.11",

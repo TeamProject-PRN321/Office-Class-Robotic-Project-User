@@ -54,7 +54,7 @@ const Dashboard = () => {
         }}
       >
         <Grid item display={'flex'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
-          <Typography sx={{ color: 'black', fontWeight: 'bold' }}>Schedules</Typography>
+          <Typography sx={{ color: 'black', fontWeight: 'bold' }}>Subjects</Typography>
           <Button
             sx={{
               backgroundColor: '#ecf1ff',

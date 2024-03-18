@@ -204,7 +204,8 @@ export default function DialogForm() {
       dateStartClass: moment(dateStartClass).format('YYYY-MM-DD'),
       subjectId: subjectId,
       teacherId: teacherId,
-      classRoomID: classRoomID
+      classRoomID: classRoomID,
+      AppUserId: ''
     }
 
     try {
