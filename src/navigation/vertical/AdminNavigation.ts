@@ -10,11 +10,6 @@ import { Person2Outlined, Schedule } from '@mui/icons-material'
 const navigationAdmin = (): VerticalNavItemsType => {
   return [
     {
-      title: 'Dashboard',
-      icon: HomeOutline,
-      path: '/'
-    },
-    {
       title: 'Class',
       icon: SchoolOutline,
       path: '/classes'

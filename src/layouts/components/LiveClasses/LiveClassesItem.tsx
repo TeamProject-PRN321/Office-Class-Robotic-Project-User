@@ -3,6 +3,13 @@ import { Calendar, ClockOutline } from 'mdi-material-ui'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { ClassModel } from './AddNewClass/NewClassFormLiveClass'
 
@@ -12,7 +19,18 @@ interface LiveClassItemsProps {
 
 export default function LiveClassItems({ data }: LiveClassItemsProps) {
   const route = useRouter()
-  const ViewDetailLiveClass = () => {
+
+  const [open, setOpen] = React.useState(false)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleUpGradeStudent = () => {
     route.push('/students')
   }
 
@@ -49,15 +67,45 @@ export default function LiveClassItems({ data }: LiveClassItemsProps) {
       <Button
         sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
         onClick={() => {
-          ViewDetailLiveClass()
+          handleClickOpen()
         }}
       >
         John now
       </Button>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle sx={{ fontWeight: 'bold' }} id='alert-dialog-title'>
+          {'Sorry. Functions are not yet developed.'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Link google meeting: https://meet.google.com/toi-suxg-cax
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{
+              backgroundColor: '#5972F3',
+              color: 'white',
+              ':hover': { backgroundColor: '#008BC5', color: 'white' }
+            }}
+            onClick={handleClose}
+            autoFocus
+          >
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Button
         sx={{ backgroundColor: '#5972F3', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
         onClick={() => {
-          ViewDetailLiveClass()
+          handleUpGradeStudent()
         }}
       >
         Students in class

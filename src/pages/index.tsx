@@ -2,16 +2,30 @@
 import Grid from '@mui/material/Grid'
 
 // ** Demo Components Imports
-import { Button, Typography } from '@mui/material'
+import { Button, Card, Tab, Typography } from '@mui/material'
 import { Launch } from 'mdi-material-ui'
 import LiveClasses from 'src/layouts/components/Dashboard/DashboardLiveClasses'
 import Teachers from 'src/layouts/components/Dashboard/DashboardTeachers'
 import ScheduleDashboard from 'src/layouts/components/Dashboard/DashboardSchedule'
 import { useRouter } from 'next/router'
 import { SubjectModel } from 'src/layouts/components/Subject/SubjectItems'
+import SchedulerTable from 'src/layouts/components/Subject/Scheduler'
+import useAuth from 'src/@core/hooks/useAuth'
+import { useState, SyntheticEvent } from 'react'
+import TabList from '@mui/lab/TabList'
+import TabPanel from '@mui/lab/TabPanel'
+import TabContext from '@mui/lab/TabContext'
+import CardContent from '@mui/material/CardContent'
+import NewClassForm from 'src/layouts/components/LiveClasses/AddNewClass/NewClassFormLiveClass'
+import NewClassFormHistoryClass from 'src/layouts/components/LiveClasses/AddNewClass/NewClassFormHistoryClass'
 
 const Dashboard = () => {
   const router = useRouter()
+  const [value, setValue] = useState<string>('1')
+
+  const handleChange = (event: SyntheticEvent, newValue: string) => {
+    setValue(newValue)
+  }
   const ViewAllClass = () => {
     router.push('/classes')
   }
@@ -20,6 +34,55 @@ const Dashboard = () => {
   }
   const ViewAllProfessor = () => {
     router.push('/teachers')
+  }
+
+  const role = useAuth().role
+  if (role === 'Student') {
+    return <SchedulerTable></SchedulerTable>
+  }
+
+  if (role === 'Teacher') {
+    return (
+      <Card>
+        <TabContext value={value}>
+          <TabList onChange={handleChange} aria-label='card navigation example'>
+            <Tab sx={{ fontWeight: 'bold' }} value='1' label='Live Class' />
+            <Tab sx={{ fontWeight: 'bold' }} value='2' label='Attendance Class' />
+          </TabList>
+          <CardContent>
+            <TabPanel value='1' sx={{ p: 0 }}>
+              <NewClassForm></NewClassForm>
+            </TabPanel>
+
+            <TabPanel value='2' sx={{ p: 0 }}>
+              <NewClassFormHistoryClass></NewClassFormHistoryClass>
+            </TabPanel>
+          </CardContent>
+        </TabContext>
+      </Card>
+    )
+  }
+
+  if (role === 'Admin') {
+    return (
+      <Card>
+        <TabContext value={value}>
+          <TabList onChange={handleChange} aria-label='card navigation example'>
+            <Tab sx={{ fontWeight: 'bold' }} value='1' label='Live Class' />
+            <Tab sx={{ fontWeight: 'bold' }} value='2' label='Attendance Class' />
+          </TabList>
+          <CardContent>
+            <TabPanel value='1' sx={{ p: 0 }}>
+              <NewClassForm></NewClassForm>
+            </TabPanel>
+
+            <TabPanel value='2' sx={{ p: 0 }}>
+              <NewClassFormHistoryClass></NewClassFormHistoryClass>
+            </TabPanel>
+          </CardContent>
+        </TabContext>
+      </Card>
+    )
   }
 
   return (

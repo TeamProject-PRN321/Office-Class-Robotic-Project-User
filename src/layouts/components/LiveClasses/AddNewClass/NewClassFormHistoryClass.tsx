@@ -81,7 +81,7 @@ export default function NewClassFormHistoryClass() {
         width={'100%'}
         alignItems={'center'}
       >
-        <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}> Live Classes</Typography>
+        <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}> Classes</Typography>
         {role === 'Admin' && <DialogForm></DialogForm>}
       </Grid>
       {classes.map((item, index) => {

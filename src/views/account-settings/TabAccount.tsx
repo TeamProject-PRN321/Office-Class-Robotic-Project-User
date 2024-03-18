@@ -1,30 +1,28 @@
 // ** React Imports
-import { useState, ElementType, ChangeEvent, SyntheticEvent, forwardRef, useEffect } from 'react'
+import { useState, ElementType, ChangeEvent, forwardRef } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Link from '@mui/material/Link'
-import Alert from '@mui/material/Alert'
 import Select from '@mui/material/Select'
 import { styled } from '@mui/material/styles'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import InputLabel from '@mui/material/InputLabel'
-import AlertTitle from '@mui/material/AlertTitle'
-import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import Button, { ButtonProps } from '@mui/material/Button'
 
 // ** Icons Imports
-import Close from 'mdi-material-ui/Close'
 import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import DatePicker from 'react-datepicker'
-import useAuth from 'src/@core/hooks/useAuth'
 import useAxios from 'src/@core/hooks/useAxios'
+import { toast } from 'react-toastify'
+import axios from 'axios'
+import moment from 'moment'
+import { ErrorModel } from 'src/layouts/components/Subject/AddSubject/NewSubjectForm'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
@@ -65,44 +63,76 @@ export interface ProfileModel {
   photoUrl: string
   studentId?: string
   parent?: ProfileModel
-  parentId?: string
+  parentID?: string
 }
+
+const initial = {
+  userName: '',
+  fullName: '',
+  email: '',
+  phoneNumber: '',
+  dateOfBirth: '',
+  gender: 'male',
+  address: '',
+  photoUrl: ''
+} as ProfileModel
 
 const TabAccount = () => {
   // ** State
-  const [openAlert, setOpenAlert] = useState<boolean>(true)
   const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
-  const [date, setDate] = useState<Date | null | undefined>(null)
+  const [imgData, setImgData] = useState<any>()
+  const [date, setDate] = useState<Date | null | undefined>(moment().toDate())
+  const [profile, setProfile] = useState<ProfileModel>(initial)
+  const [role, setRole] = useState<string>('Student')
 
-  // const [usernames, setUsername] = useState<string>('');
-  // const [fullname, setFullname] = useState<string>('');
-  // const [email, setEmail] = useState<string>('')
-  // const [phone, setPhone] = useState<string>('')
-  // const [birthday, setBirthday] = useState<string>('')
-  // const [gender, setGender] = useState<string>('')
-  // const [address, setAddress] = useState<string>('')
-  // const [photo, setPhoto] = useState<string>('')
+  const axiosClient = useAxios()
 
-  const [profile, setProfile] = useState<ProfileModel>({} as ProfileModel)
+  const handleUploadFile = async () => {
+    try {
+      const formData = new FormData()
+      formData.append('pdf', imgData)
+      const response = await axios.post('http://localhost:3000/api/upload', formData)
+      console.log(response.data.done[0])
 
-  const auth = useAuth()
-  const axios = useAxios()
+      return response.data.done[0].filepath.split('\\public')[1]
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-  useEffect(() => {
-    const handelProfile = async () => {
-      try {
-        if (!auth.Id) return
+  const handleSubmit = () => {
+    switch (role) {
+      case 'Student':
+        submit('/Account/register-student-account', profile)
+        break
+      case 'Admin':
+        submit('/Account/register-admin-account', profile)
+        break
+      case 'Teacher':
+        submit('/Account/register-teacher-account', profile)
+        break
+      default:
+        break
+    }
+  }
 
-        const data = await axios.call('get', '/api/v1/student/get-student-by-appuser-id/' + auth.Id)
-        setProfile(data as ProfileModel)
-        console.log(data)
-      } catch (error) {
-        console.log(error)
+  const submit = async (url: string, data: ProfileModel) => {
+    try {
+      const imgUrl = await handleUploadFile()
+      await axiosClient.call('post', url, {
+        ...data,
+        photoUrl: imgUrl,
+        dateOfBirth: moment(date).format('YYYY-MM-DD')
+      } as ProfileModel)
+      toast.success('Created Successfully!!!')
+    } catch (error: any) {
+      console.log(error?.response.data)
+      const title = (error?.response.data as ErrorModel).title
+      if (title) {
+        toast.error(title)
       }
     }
-
-    handelProfile()
-  }, [auth.Id])
+  }
 
   return (
     <CardContent>
@@ -120,6 +150,9 @@ const TabAccount = () => {
                     onChange={(file: ChangeEvent) => {
                       const reader = new FileReader()
                       const { files } = file.target as HTMLInputElement
+                      if (!files) return
+
+                      setImgData(files[0])
                       if (files && files.length !== 0) {
                         reader.onload = () => setImgSrc(reader.result as string)
 
@@ -141,16 +174,70 @@ const TabAccount = () => {
             </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Username' value={profile.userName} />
+            <TextField
+              fullWidth
+              label='Username'
+              value={profile.userName}
+              onChange={e =>
+                setProfile({
+                  ...profile,
+                  userName: e.target.value
+                })
+              }
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Name' value={profile.fullName} />
+            <TextField
+              fullWidth
+              label='Name'
+              value={profile.fullName}
+              onChange={e =>
+                setProfile({
+                  ...profile,
+                  fullName: e.target.value
+                })
+              }
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth type='email' label='Email' value={profile.email} />
+            <TextField
+              fullWidth
+              type='email'
+              label='Email'
+              value={profile.email}
+              onChange={e =>
+                setProfile({
+                  ...profile,
+                  email: e.target.value
+                })
+              }
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Phone' value={profile.phoneNumber} />
+            <TextField
+              fullWidth
+              label='Phone'
+              value={profile.phoneNumber}
+              onChange={e =>
+                setProfile({
+                  ...profile,
+                  phoneNumber: e.target.value
+                })
+              }
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label='Address'
+              value={profile.address}
+              onChange={e =>
+                setProfile({
+                  ...profile,
+                  address: e.target.value
+                })
+              }
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <DatePickerWrapper>
@@ -168,14 +255,25 @@ const TabAccount = () => {
           <Grid item xs={12} sm={6}>
             <FormControl>
               <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
-              <RadioGroup row defaultValue='male' aria-label='gender' name='account-settings-info-radio'>
+              <RadioGroup
+                row
+                defaultValue='male'
+                aria-label='gender'
+                name='account-settings-info-radio'
+                value={profile.gender}
+                onChange={e =>
+                  setProfile({
+                    ...profile,
+                    gender: e.currentTarget.value
+                  })
+                }
+              >
                 <FormControlLabel value='male' label='Male' control={<Radio />} />
                 <FormControlLabel value='female' label='Female' control={<Radio />} />
-                <FormControlLabel value='other' label='Other' control={<Radio />} />
               </RadioGroup>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          {/* <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
               <Select label='Status' defaultValue='active'>
@@ -184,24 +282,29 @@ const TabAccount = () => {
                 <MenuItem value='pending'>Pending</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Role</InputLabel>
-              <Select label='Role' defaultValue='admin'>
-                <MenuItem value='admin'>Admin</MenuItem>
-                <MenuItem value='editor'>Teacher</MenuItem>
-                <MenuItem value='maintainer'>Student</MenuItem>
-                <MenuItem value='subscriber'>Parent</MenuItem>
+              <Select label='Role' defaultValue='Student' value={role} onChange={e => setRole(e.target?.value)}>
+                <MenuItem value='Admin'>Admin</MenuItem>
+                <MenuItem value='Teacher'>Teacher</MenuItem>
+                <MenuItem value='Student'>Student</MenuItem>
               </Select>
             </FormControl>
           </Grid>
+
+          {/* {role === 'Student' && (
+            <Grid item >
+              <Autocomplete />
+            </Grid>
+          )} */}
 
           {/* <Grid item xs={12} sm={6}>
             <TextField fullWidth label='Company' placeholder='ABC Pvt. Ltd.' defaultValue='ABC Pvt. Ltd.' />
           </Grid> */}
 
-          {openAlert ? (
+          {/* {openAlert ? (
             <Grid item xs={12} sx={{ mb: 3 }}>
               <Alert
                 severity='warning'
@@ -218,13 +321,10 @@ const TabAccount = () => {
                 </Link>
               </Alert>
             </Grid>
-          ) : null}
+          ) : null} */}
           <Grid item xs={12}>
-            <Button variant='contained' sx={{ marginRight: 3.5 }}>
+            <Button variant='contained' sx={{ marginRight: 3.5 }} onClick={handleSubmit}>
               Save Changes
-            </Button>
-            <Button type='reset' variant='outlined' color='secondary'>
-              Reset
             </Button>
           </Grid>
         </Grid>

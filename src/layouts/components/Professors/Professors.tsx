@@ -9,7 +9,6 @@ import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
@@ -19,14 +18,11 @@ import FormLabel from '@mui/material/FormLabel'
 
 interface ProfessorItemsProps {
   teacherModel: TeacherModel
+  onClickViewDetail: (value: TeacherModel) => void
 }
 
-export default function ProfessorItems({ teacherModel }: ProfessorItemsProps) {
+export default function ProfessorItems({ teacherModel, onClickViewDetail }: ProfessorItemsProps) {
   const [open, setOpen] = React.useState(false)
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
 
   const handleClose = () => {
     setOpen(false)
@@ -57,7 +53,7 @@ export default function ProfessorItems({ teacherModel }: ProfessorItemsProps) {
 
       <Button
         sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
-        onClick={() => handleClickOpen()}
+        onClick={() => onClickViewDetail(teacherModel)}
       >
         View details
       </Button>
@@ -106,7 +102,7 @@ export default function ProfessorItems({ teacherModel }: ProfessorItemsProps) {
               type='submit'
               onClick={handleClose}
             >
-              Continue
+              Close
             </Button>
           </DialogActions>
         </Box>

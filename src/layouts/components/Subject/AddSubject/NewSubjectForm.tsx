@@ -109,7 +109,7 @@ export default function NewSubjectForm({ callBackCreate }: { callBackCreate: () 
       console.log(error?.response.data)
       const title = (error?.response.data as ErrorModel).title
       if (title) {
-        toast.success(title)
+        toast.error(title)
       }
     }
   }

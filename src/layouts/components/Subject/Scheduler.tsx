@@ -17,6 +17,8 @@ import moment from 'moment'
 import { Fragment, useEffect, useState } from 'react'
 import ListIcon from '@mui/icons-material/List'
 import useAxios from 'src/@core/hooks/useAxios'
+import { StudentInfoModel } from '../LiveClasses/AddNewClass/NewClassFormLiveClass'
+import useAuth from 'src/@core/hooks/useAuth'
 
 export interface Subject {
   className: string
@@ -27,152 +29,6 @@ export interface Subject {
   timeDetail: string
   totalStudentInClass: number
 }
-
-// const data: ScheduleModel[] = [
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '12-03-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '15-03-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '19-03-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '22-03-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '26-03-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '29-03-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '02-04-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '05-04-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '09-04-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '12-04-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '16-04-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '19-04-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   },
-//   {
-//     subjectId: 'a3a258b8-ae79-49c2-96d5-05fe51912a0e',
-//     subjectName: 'Introduction C# OOP',
-//     timeStart: '19:00:00',
-//     timeEnd: '22:00:00',
-//     teacherId: '53525c34-3437-4b3b-946c-e9be0a60c0c3',
-//     teacherName: 'Nguyen Phuong LyLy',
-//     dateLearn: '23-04-2024',
-//     slotRemaining: 13,
-//     slotAttendanceStatus: 'Not yet'
-//   }
-// ]
 
 export interface ScheduleModel {
   subjectId: string
@@ -193,6 +49,7 @@ type MapDateScheduleModel = {
 const range = (start: number, end: number, step: number) => {
   return Array.from(Array.from(Array(Math.ceil((end - start) / step)).keys()), x => start + x * step)
 }
+const API_GET_STUDENT_BY_ID = '/api/v1/student/get-student-by-appuser-id/'
 
 const list = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 const timeLst = range(6, 25, 1)
@@ -248,14 +105,27 @@ export default function SchedulerTable() {
   const [mapSchedules, setMapSchedules] = useState<MapDateScheduleModel>({})
 
   const axiosClient = useAxios()
+  const authen = useAuth()
+  const id = authen.Id
 
   //Get Schedule
   useEffect(() => {
+    const fetchStudentInfo = async () => {
+      try {
+        const response = await axiosClient.call('get', API_GET_STUDENT_BY_ID + id, null, true)
+
+        return (response as StudentInfoModel).studentId
+      } catch (error) {}
+    }
+
     const handleGetSchedule = async () => {
       try {
+        const studentId = await fetchStudentInfo()
         const response = await axiosClient.call(
           'get',
-          '/api/v1/student/get-schedule-of-student-by-student-id?StudentId=74118244-94b9-466f-9e50-57f3d3733612'
+          '/api/v1/student/get-schedule-of-student-by-student-id?StudentId=' + studentId,
+          null,
+          true
         )
         console.log(response)
 
@@ -276,13 +146,6 @@ export default function SchedulerTable() {
     }
 
     handleGetSchedule()
-  }, [])
-
-  useEffect(() => {
-    const parent = document.getElementById('slot_time_14')
-    if (parent)
-      parent.innerHTML =
-        '<div class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-tckmah-MuiPaper-root-MuiCard-root"><div class="MuiBox-root css-1129bf7"></div><div class="MuiBox-root css-j7qwjs"><p class="MuiTypography-root MuiTypography-body1 css-1tpsv8u-MuiTypography-root">Tên Môn</p><span class="MuiTypography-root MuiTypography-caption css-1gtrqkn-MuiTypography-root">SL HS bfsbug</span></div><p class="MuiTypography-root MuiTypography-body1 css-2rtyd8-MuiTypography-root">Thời gian</p></div>'
   }, [])
 
   return (

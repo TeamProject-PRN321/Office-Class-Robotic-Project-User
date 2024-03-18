@@ -40,6 +40,32 @@ const TabName = styled('span')(({ theme }) => ({
   }
 }))
 
+export interface StudentDetailModel {
+  appUserId: string
+  studentId: string
+  parent: Parent
+  userName: string
+  fullName: string
+  email: string
+  phoneNumber: string
+  dateOfBirth: string
+  gender: string
+  address: string
+  photoUrl: string
+}
+
+export interface Parent {
+  parentId: string
+  userName: string
+  fullName: string
+  email: string
+  phoneNumber: string
+  dateOfBirth: string
+  gender: string
+  address: string
+  photoUrl: string
+}
+
 const AccountSettings = () => {
   // ** State
   const [value, setValue] = useState<string>('new-account')

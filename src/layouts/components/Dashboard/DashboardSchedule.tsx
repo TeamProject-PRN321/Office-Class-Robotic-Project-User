@@ -2,23 +2,16 @@ import { Box, Button, Card, Typography } from '@mui/material'
 import * as React from 'react'
 import { SubjectModel } from '../Subject/SubjectItems'
 
-export default function ScheduleDashboard({ data = {} as SubjectModel }: { data: SubjectModel }) {
+export default function ScheduleDashboard({
+  data = {} as SubjectModel,
+  onClickViewDetail
+}: {
+  data: SubjectModel
+  onClickViewDetail: (value: SubjectModel) => void
+}) {
   return (
     <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column', width: '100%' }}>
       <Typography sx={{ color: 'black', fontWeight: 'bold' }}>{data.subjectName}</Typography>
-      {/* <Typography
-        sx={{
-          border: '1px solid #B0AAAE',
-          borderRadius: '10px',
-          width: 'fit-content',
-          padding: '5px',
-          fontSize: '13px',
-          fontWeight: 'bold',
-          color: '#3B9F4A'
-        }}
-      >
-        Professor: Trần Duy Thanh
-      </Typography> */}
       <Typography
         sx={{
           border: '1px solid #B0AAAE',
@@ -53,6 +46,9 @@ export default function ScheduleDashboard({ data = {} as SubjectModel }: { data:
 
       <Button
         sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
+        onClick={() => {
+          onClickViewDetail(data)
+        }}
       >
         View details
       </Button>
