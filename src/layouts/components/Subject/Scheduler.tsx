@@ -243,17 +243,17 @@ const Slot = ({ data }: { data: ScheduleModel }) => {
   )
 }
 
-export default function WareHouseTable() {
+export default function SchedulerTable() {
   const [next, setNext] = useState<number>(0)
   const [mapSchedules, setMapSchedules] = useState<MapDateScheduleModel>({})
 
-  const axios = useAxios()
+  const axiosClient = useAxios()
 
   //Get Schedule
   useEffect(() => {
     const handleGetSchedule = async () => {
       try {
-        const response = await axios.call(
+        const response = await axiosClient.call(
           'get',
           '/api/v1/student/get-schedule-of-student-by-student-id?StudentId=74118244-94b9-466f-9e50-57f3d3733612'
         )
@@ -369,7 +369,15 @@ export default function WareHouseTable() {
             <TableHead>
               <TableRow sx={{ height: heightOfASlot, zIndex: 1000, borderBottom: '1px solid grey' }}>
                 <TableCell
-                  sx={{ border: '0.2px solid #CCCCCC', width: '80px', height: heightOfASlot, zIndex: 101 }}
+                  sx={{
+                    border: '0.2px solid #CCCCCC',
+                    width: '80px',
+                    height: heightOfASlot,
+                    zIndex: 101,
+                    '&.MuiTableCell-root': {
+                      zIndex: 0
+                    }
+                  }}
                 ></TableCell>
                 {list.map((item, i) => {
                   return (

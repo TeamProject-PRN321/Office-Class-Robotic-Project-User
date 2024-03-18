@@ -6,6 +6,7 @@ import LiveClassItems from 'src/layouts/components/LiveClasses/LiveClassesItem'
 
 import { SyntheticEvent, useState } from 'react'
 import DeviceItems from 'src/layouts/components/Devices/DeviceItem'
+import { ClassModel } from 'src/layouts/components/LiveClasses/AddNewClass/NewClassFormLiveClass'
 
 export default function App() {
   // ** State
@@ -98,25 +99,25 @@ export default function App() {
                 </Button>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
               </Grid>
               <Grid item>
-                <LiveClassItems></LiveClassItems>
+                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
               </Grid>
             </Grid>
           </TabPanel>

@@ -5,6 +5,6 @@ import * as React from 'react'
 
 import SubjectItems from 'src/layouts/components/Subject/SubjectItems'
 
-export default function App() {
+export default function SubjectsPage() {
   return <SubjectItems></SubjectItems>
 }

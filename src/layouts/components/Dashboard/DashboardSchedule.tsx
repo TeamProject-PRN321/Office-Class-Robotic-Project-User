@@ -1,12 +1,12 @@
 import { Box, Button, Card, Typography } from '@mui/material'
-import { BookmarkCheckOutline, SchoolOutline } from 'mdi-material-ui'
 import * as React from 'react'
+import { SubjectModel } from '../Subject/SubjectItems'
 
-export default function ScheduleDashboard() {
+export default function ScheduleDashboard({ data = {} as SubjectModel }: { data: SubjectModel }) {
   return (
-    <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column' }}>
-      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>RESTful API designing với Spring Boot</Typography>
-      <Typography
+    <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column', width: '100%' }}>
+      <Typography sx={{ color: 'black', fontWeight: 'bold' }}>{data.subjectName}</Typography>
+      {/* <Typography
         sx={{
           border: '1px solid #B0AAAE',
           borderRadius: '10px',
@@ -18,7 +18,7 @@ export default function ScheduleDashboard() {
         }}
       >
         Professor: Trần Duy Thanh
-      </Typography>
+      </Typography> */}
       <Typography
         sx={{
           border: '1px solid #B0AAAE',
@@ -29,13 +29,26 @@ export default function ScheduleDashboard() {
           color: '#3B9F4A'
         }}
       >
-        Date: 3 months
+        Total slot: {data.totalSlots} slot(s)
       </Typography>
-      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      {/* <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <SchoolOutline sx={{ marginRight: '3px' }}></SchoolOutline>
         <Typography sx={{ marginRight: '15px' }}>3: Class</Typography>
         <BookmarkCheckOutline sx={{ marginRight: '3px' }}></BookmarkCheckOutline>
         <Typography>1: Course</Typography>
+      </Box> */}
+      <Box>
+        <Typography fontWeight={700}>Document: </Typography>
+        <Typography
+          component={'a'}
+          sx={{
+            textDecorationLine: 'underline',
+            color: theme => theme.palette.info.light,
+            pl: 3
+          }}
+        >
+          {data.giaoTrinhData?.giaoTrinhName}
+        </Typography>
       </Box>
 
       <Button

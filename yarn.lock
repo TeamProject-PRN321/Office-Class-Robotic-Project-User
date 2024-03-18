@@ -701,6 +701,13 @@
     "@syncfusion/ej2-base" "~24.2.7"
     "@syncfusion/ej2-popups" "~24.2.5"
 
+"@types/formidable@^3.4.5":
+  version "3.4.5"
+  resolved "https://registry.npmjs.org/@types/formidable/-/formidable-3.4.5.tgz"
+  integrity sha512-s7YPsNVfnsng5L8sKnG/Gbb2tiwwJTY1conOkJzTMRvJAlLFW1nEua+ADsJQu8N1c0oTHx9+d5nqg10WuT9gHQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/json-schema@^7.0.9":
   version "7.0.9"
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.9.tgz"

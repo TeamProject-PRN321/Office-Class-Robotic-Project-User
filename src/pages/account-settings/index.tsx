@@ -1,5 +1,5 @@
 // ** React Imports
-import { SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -20,6 +20,7 @@ import TabAccount from 'src/views/account-settings/TabAccount'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
+import useAuth from 'src/@core/hooks/useAuth'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -41,7 +42,17 @@ const TabName = styled('span')(({ theme }) => ({
 
 const AccountSettings = () => {
   // ** State
-  const [value, setValue] = useState<string>('account')
+  const [value, setValue] = useState<string>('new-account')
+
+  const authen = useAuth()
+  const role = authen.role
+
+  const isAdmin = () => role === 'Admin'
+
+  useEffect(() => {
+    if (role === 'Admin') setValue('new-account')
+    else setValue('info')
+  }, [role])
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
@@ -55,15 +66,17 @@ const AccountSettings = () => {
           aria-label='account-settings tabs'
           sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
         >
-          <Tab
-            value='new-account'
-            label={
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <AccountOutline />
-                <TabName>New Account</TabName>
-              </Box>
-            }
-          />
+          {isAdmin() && (
+            <Tab
+              value='new-account'
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <AccountOutline />
+                  <TabName>New Account</TabName>
+                </Box>
+              }
+            />
+          )}
 
           {/* <Tab
             value='security'
@@ -74,16 +87,17 @@ const AccountSettings = () => {
               </Box>
             }
           /> */}
-
-          <Tab
-            value='info'
-            label={
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <InformationOutline />
-                <TabName> Account Information</TabName>
-              </Box>
-            }
-          />
+          {!isAdmin() && (
+            <Tab
+              value='info'
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <InformationOutline />
+                  <TabName> Account Information</TabName>
+                </Box>
+              }
+            />
+          )}
         </TabList>
 
         <TabPanel sx={{ p: 0 }} value='new-account'>

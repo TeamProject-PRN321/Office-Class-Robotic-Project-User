@@ -23,13 +23,13 @@ const VisuallyHiddenInput = styled('input')({
 })
 
 const StudentLists = () => {
-  const [data, setData] = useState([])
+  const [data, setData] = useState<any[]>([])
 
-  const handelFileUpload = e => {
+  const handelFileUpload = (e: any) => {
     const reader = new FileReader()
     reader.readAsBinaryString(e.target.files[0])
     reader.onload = e => {
-      const data = e.target.result
+      const data = e.target?.result
       const workbook = XLSX.read(data, { type: 'binary' })
       const sheetName = workbook.SheetNames[0]
       const sheet = workbook.Sheets[sheetName]
@@ -77,7 +77,12 @@ const StudentLists = () => {
           </Button>
         </Box>
       </Grid> */}
-      <TextField variant='outlined' accept='.xlsx,.xls' type='file' onChange={handelFileUpload}></TextField>
+      <TextField
+        variant='outlined'
+        inputProps={{ accept: '.xlsx,.xls' }}
+        type='file'
+        onChange={handelFileUpload}
+      ></TextField>
       <Grid container item xs={12}>
         <Grid item xs={6} spacing={1}>
           <Button
@@ -133,7 +138,7 @@ const StudentLists = () => {
             <tbody>
               {data.map((row, index) => (
                 <tr key={index}>
-                  {Object.values(row).map((value, index) => (
+                  {Object.values(row).map((value: any, index) => (
                     <td key={index}>{value}</td>
                   ))}
                 </tr>

@@ -93,8 +93,8 @@ const TabAccount = () => {
       try {
         if (!auth.Id) return
 
-        const data = await axios.call('get', '/api/v1/student/get-student-by-student-id/' + auth.Id)
-        setProfile(data)
+        const data = await axios.call('get', '/api/v1/student/get-student-by-appuser-id/' + auth.Id)
+        setProfile(data as ProfileModel)
         console.log(data)
       } catch (error) {
         console.log(error)

@@ -83,11 +83,17 @@ export default function HistoryClasses({ data }: HistoryClassesProps) {
       >
         Teacher: Ngô Thị Hương
       </Typography> */}
-      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <ClockOutline></ClockOutline>
-        <Typography sx={{ marginRight: '15px' }}>{moment(data.startTime, 'HH:mm:ss').format('HH:mm')}</Typography>
-        <Calendar></Calendar>
-        <Typography>{data.dayStudy}</Typography>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+          <ClockOutline></ClockOutline>
+          <Typography sx={{ marginRight: '15px' }}>
+            {moment(data.startTime, 'HH:mm:ss').format('HH:mm')} - {moment(data.endTime, 'HH:mm:ss').format('HH:mm')}
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+          <Calendar></Calendar>
+          <Typography>{data.dayStudy}</Typography>
+        </Box>
       </Box>
       <Typography
         sx={{

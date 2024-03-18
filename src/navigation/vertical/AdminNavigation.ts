@@ -20,11 +20,6 @@ const navigationAdmin = (): VerticalNavItemsType => {
       path: '/classes'
     },
     {
-      title: 'Schedule',
-      icon: CubeOutline,
-      path: '/schedule'
-    },
-    {
       title: 'Subject',
       icon: Schedule,
       path: '/subjects'

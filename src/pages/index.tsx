@@ -8,6 +8,7 @@ import LiveClasses from 'src/layouts/components/Dashboard/DashboardLiveClasses'
 import Teachers from 'src/layouts/components/Dashboard/DashboardTeachers'
 import ScheduleDashboard from 'src/layouts/components/Dashboard/DashboardSchedule'
 import { useRouter } from 'next/router'
+import { SubjectModel } from 'src/layouts/components/Subject/SubjectItems'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -72,19 +73,19 @@ const Dashboard = () => {
           </Button>
         </Grid>
         <Grid item>
-          <ScheduleDashboard />
+          <ScheduleDashboard data={{} as SubjectModel} />
         </Grid>
         <Grid item>
-          <ScheduleDashboard />
+          <ScheduleDashboard data={{} as SubjectModel} />
         </Grid>
         <Grid item>
-          <ScheduleDashboard />
+          <ScheduleDashboard data={{} as SubjectModel} />
         </Grid>
         <Grid item>
-          <ScheduleDashboard />
+          <ScheduleDashboard data={{} as SubjectModel} />
         </Grid>
         <Grid item>
-          <ScheduleDashboard />
+          <ScheduleDashboard data={{} as SubjectModel} />
         </Grid>
       </Grid>
 
