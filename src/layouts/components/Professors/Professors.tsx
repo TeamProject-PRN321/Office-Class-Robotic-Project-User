@@ -44,6 +44,8 @@ export default function ProfessorItems({ teacherModel }: ProfessorItemsProps) {
       >
         View details
       </Button>
+
+      {/* Dialog */}
     </Card>
   )
 }

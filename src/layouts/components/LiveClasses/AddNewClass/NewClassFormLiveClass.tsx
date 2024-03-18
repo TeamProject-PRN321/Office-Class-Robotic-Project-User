@@ -74,7 +74,7 @@ export default function NewClassFormLiveClass() {
 
         setClasses(response as ClassModel[])
       } catch (error) {
-        console.log(error)
+        console.log('Not found table time' + error)
       }
     }
 

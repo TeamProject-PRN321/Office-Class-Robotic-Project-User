@@ -12,13 +12,11 @@ import MuiTab, { TabProps } from '@mui/material/Tab'
 
 // ** Icons Imports
 import AccountOutline from 'mdi-material-ui/AccountOutline'
-import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
 import InformationOutline from 'mdi-material-ui/InformationOutline'
 
 // ** Demo Tabs Imports
 import TabInfo from 'src/views/account-settings/TabInfo'
 import TabAccount from 'src/views/account-settings/TabAccount'
-import TabSecurity from 'src/views/account-settings/TabSecurity'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
@@ -58,15 +56,16 @@ const AccountSettings = () => {
           sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
         >
           <Tab
-            value='account'
+            value='new-account'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <AccountOutline />
-                <TabName>Account</TabName>
+                <TabName>New Account</TabName>
               </Box>
             }
           />
-          <Tab
+
+          {/* <Tab
             value='security'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -74,24 +73,27 @@ const AccountSettings = () => {
                 <TabName>Security</TabName>
               </Box>
             }
-          />
+          /> */}
+
           <Tab
             value='info'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <InformationOutline />
-                <TabName>Info</TabName>
+                <TabName> Account Information</TabName>
               </Box>
             }
           />
         </TabList>
 
-        <TabPanel sx={{ p: 0 }} value='account'>
+        <TabPanel sx={{ p: 0 }} value='new-account'>
           <TabAccount />
         </TabPanel>
-        <TabPanel sx={{ p: 0 }} value='security'>
+
+        {/* <TabPanel sx={{ p: 0 }} value='security'>
           <TabSecurity />
-        </TabPanel>
+        </TabPanel> */}
+
         <TabPanel sx={{ p: 0 }} value='info'>
           <TabInfo />
         </TabPanel>

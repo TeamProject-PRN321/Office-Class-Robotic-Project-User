@@ -195,8 +195,8 @@ const range = (start: number, end: number, step: number) => {
 }
 
 const list = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-const timeLst = range(7, 25, 1)
-const heightOfASlot = 50
+const timeLst = range(6, 25, 1)
+const heightOfASlot = 60
 const widthOfASlot = 150
 
 const Slot = ({ data }: { data: ScheduleModel }) => {

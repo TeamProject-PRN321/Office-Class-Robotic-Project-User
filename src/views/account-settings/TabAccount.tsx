@@ -128,6 +128,7 @@ const TabAccount = () => {
                     }}
                     accept='image/png, image/jpeg'
                     id='account-settings-upload-image'
+                    value={profile.photoUrl}
                   />
                 </ButtonStyled>
                 <ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc('/images/avatars/1.png')}>
@@ -140,22 +141,16 @@ const TabAccount = () => {
             </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField disabled fullWidth label='Username' value={profile.userName} />
+            <TextField fullWidth label='Username' value={profile.userName} />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField fullWidth label='Name' value={profile.fullName} />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              type='email'
-              label='Email'
-              placeholder='ttqa0508@gmail.com'
-              defaultValue='ttqa0508@gmail.com'
-            />
+            <TextField fullWidth type='email' label='Email' value={profile.email} />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth type='number' label='Phone' placeholder='(+84) 358582251' />
+            <TextField fullWidth label='Phone' value={profile.phoneNumber} />
           </Grid>
           <Grid item xs={12} sm={6}>
             <DatePickerWrapper>
@@ -183,7 +178,7 @@ const TabAccount = () => {
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
-              <Select disabled label='Status' defaultValue='active'>
+              <Select label='Status' defaultValue='active'>
                 <MenuItem value='active'>Active</MenuItem>
                 <MenuItem value='inactive'>Inactive</MenuItem>
                 <MenuItem value='pending'>Pending</MenuItem>
@@ -193,7 +188,7 @@ const TabAccount = () => {
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Role</InputLabel>
-              <Select disabled label='Role' defaultValue='admin'>
+              <Select label='Role' defaultValue='admin'>
                 <MenuItem value='admin'>Admin</MenuItem>
                 <MenuItem value='editor'>Teacher</MenuItem>
                 <MenuItem value='maintainer'>Student</MenuItem>
