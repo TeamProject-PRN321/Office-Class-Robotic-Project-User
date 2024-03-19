@@ -20,6 +20,12 @@ import useAxios from 'src/@core/hooks/useAxios'
 import { StudentInfoModel } from '../LiveClasses/AddNewClass/NewClassFormLiveClass'
 import useAuth from 'src/@core/hooks/useAuth'
 
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+
 export interface Subject {
   className: string
   classroomName: string
@@ -58,45 +64,85 @@ const widthOfASlot = 150
 
 const Slot = ({ data }: { data: ScheduleModel }) => {
   // const [idToken, setIdToken] = useState<string>('')
-  return (
-    <Tooltip title={data.subjectName}>
-      <Card
-        sx={{
-          padding: '5px',
-          position: 'absolute',
+  const [open, setOpen] = useState(false)
 
-          // top: heightOfASlot * 1 + 1 * 1 - 1 + 2 + 'px',
-          // left: widthOfASlot * 1 + 3 * 1 - 70 + 'px',
-          top: (moment(data.timeStart, 'HH:mm:ss').get('minute') / 60) * widthOfASlot + 'px',
-          left: '0.5px',
-          right: '0.5px',
-          backgroundColor: '#b39bde',
-          zIndex: 1,
-          height:
-            (moment(data.timeEnd, 'HH:mm:ss').get('hour') -
-              moment(data.timeStart, 'HH:mm:ss').get('hour') +
-              (moment(data.timeEnd, 'HH:mm:ss').get('minute') - moment(data.timeStart, 'HH:mm:ss').get('minute')) /
-                60) *
-              heightOfASlot -
-            2,
-          borderRadius: 0,
-          ':hover': {
-            cursor: 'pointer'
-          }
-        }}
-      >
-        <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} height={'100%'}>
-          <Box display={'flex'} flexDirection={'column'}>
-            <Typography fontWeight={600} color={'white'}>
-              {data.subjectName}
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  return (
+    <Fragment>
+      <Tooltip title={data.subjectName}>
+        <Card
+          onClick={handleClickOpen}
+          sx={{
+            padding: '5px',
+            position: 'absolute',
+
+            // top: heightOfASlot * 1 + 1 * 1 - 1 + 2 + 'px',
+            // left: widthOfASlot * 1 + 3 * 1 - 70 + 'px',
+            top: (moment(data.timeStart, 'HH:mm:ss').get('minute') / 60) * widthOfASlot + 'px',
+            left: '0.5px',
+            right: '0.5px',
+            backgroundColor: '#b39bde',
+            zIndex: 1,
+            height:
+              (moment(data.timeEnd, 'HH:mm:ss').get('hour') -
+                moment(data.timeStart, 'HH:mm:ss').get('hour') +
+                (moment(data.timeEnd, 'HH:mm:ss').get('minute') - moment(data.timeStart, 'HH:mm:ss').get('minute')) /
+                  60) *
+                heightOfASlot -
+              2,
+            borderRadius: 0,
+            ':hover': {
+              cursor: 'pointer'
+            }
+          }}
+        >
+          <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} height={'100%'}>
+            <Box display={'flex'} flexDirection={'column'}>
+              <Typography fontWeight={600} color={'white'}>
+                {data.subjectName}
+              </Typography>
+            </Box>
+            <Typography color={'white'} textAlign={'right'} variant='body2'>
+              {moment(data.timeStart, 'HH:mm:ss').format('HH:mm')} - {moment(data.timeEnd, 'HH:mm:ss').format('HH:mm')}
             </Typography>
           </Box>
-          <Typography color={'white'} textAlign={'right'} variant='body2'>
-            {moment(data.timeStart, 'HH:mm:ss').format('HH:mm')} - {moment(data.timeEnd, 'HH:mm:ss').format('HH:mm')}
-          </Typography>
-        </Box>
-      </Card>
-    </Tooltip>
+        </Card>
+      </Tooltip>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle sx={{ fontWeight: 'bold' }} id='alert-dialog-title'>
+          {'John in class'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Please john now in class at link google meeting: https://meet.google.com/tnf-neze-zsb
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{
+              backgroundColor: '#5972F3',
+              color: 'white',
+              ':hover': { backgroundColor: '#008BC5', color: 'white' }
+            }}
+            onClick={handleClose}
+          >
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Fragment>
   )
 }
 

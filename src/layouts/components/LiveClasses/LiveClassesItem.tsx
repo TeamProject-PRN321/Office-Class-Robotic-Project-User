@@ -12,6 +12,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { ClassModel } from './AddNewClass/NewClassFormLiveClass'
+import useAuth from 'src/@core/hooks/useAuth'
 
 interface LiveClassItemsProps {
   data: ClassModel
@@ -33,6 +34,9 @@ export default function LiveClassItems({ data }: LiveClassItemsProps) {
   const handleUpGradeStudent = () => {
     route.push('/students/' + data.className)
   }
+
+  const auth = useAuth()
+  const role = auth.role
 
   return (
     <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column', width: '100%' }}>
@@ -102,14 +106,16 @@ export default function LiveClassItems({ data }: LiveClassItemsProps) {
         </DialogActions>
       </Dialog>
 
-      <Button
-        sx={{ backgroundColor: '#5972F3', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
-        onClick={() => {
-          handleUpGradeStudent()
-        }}
-      >
-        Students in class
-      </Button>
+      {role === 'Teacher' && (
+        <Button
+          sx={{ backgroundColor: '#5972F3', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
+          onClick={() => {
+            handleUpGradeStudent()
+          }}
+        >
+          Students in class
+        </Button>
+      )}
     </Card>
   )
 }
