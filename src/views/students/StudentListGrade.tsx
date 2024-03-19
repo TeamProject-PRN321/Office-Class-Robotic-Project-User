@@ -1,10 +1,7 @@
 import { Grid, Typography } from '@mui/material'
 import * as React from 'react'
-import { useState } from 'react'
 
 export default function StudentListGrade() {
-  const [data, setData] = useState([])
-
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>

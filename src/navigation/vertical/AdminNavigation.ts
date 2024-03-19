@@ -1,8 +1,3 @@
-// ** Icon imports
-import CubeOutline from 'mdi-material-ui/CubeOutline'
-import HomeOutline from 'mdi-material-ui/HomeOutline'
-
-// ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
 import { HumanMaleBoard, Laptop, SchoolOutline } from 'mdi-material-ui'
 import { Person2Outlined, Schedule } from '@mui/icons-material'

@@ -246,7 +246,7 @@ const TabAccount = () => {
                 showYearDropdown
                 showMonthDropdown
                 id='account-settings-id'
-                placeholderText='DD-MM-YYYY'
+                placeholderText='YYYY-MM-DD'
                 customInput={<CustomInput />}
                 onChange={(date: Date | null) => setDate(date)}
               />

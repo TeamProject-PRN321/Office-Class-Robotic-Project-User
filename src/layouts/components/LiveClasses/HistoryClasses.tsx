@@ -125,7 +125,12 @@ export default function HistoryClasses({ data }: HistoryClassesProps) {
         onClick={() => {
           toggleDrawer()
         }}
-        disabled={isAbletoCheckAttendance || moment().format('DD-MM-YYYY') !== data.dayStudy}
+        disabled={
+          isAbletoCheckAttendance ||
+          moment().format('DD-MM-YYYY') !== data.dayStudy ||
+          moment(data.startTime, 'HH:mm:ss').isBefore(moment()) ||
+          moment(data.endTime, 'HH:mm:ss').isAfter(moment())
+        }
       >
         Check Attendance
       </Button>

@@ -1,12 +1,22 @@
 import { Box, Button, Card, Typography } from '@mui/material'
 import { BookmarkCheckOutline, SchoolOutline } from 'mdi-material-ui'
-import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+
 export default function ProfessorReport() {
-  const route = useRouter()
-  const ViewDetailProfessor = () => {
-    route.push('/teachers')
+  const [open, setOpen] = React.useState(false)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
   }
 
   return (
@@ -34,10 +44,37 @@ export default function ProfessorReport() {
 
       <Button
         sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
-        onClick={() => ViewDetailProfessor()}
+        onClick={() => handleClickOpen()}
       >
         Report
       </Button>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle sx={{ fontWeight: 'bold' }} id='alert-dialog-title'>
+          {'Sorry. Functions are not yet developed.'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>Please leave a report about teacher</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{
+              backgroundColor: '#5972F3',
+              color: 'white',
+              ':hover': { backgroundColor: '#008BC5', color: 'white' }
+            }}
+            onClick={handleClose}
+            autoFocus
+          >
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Card>
   )
 }

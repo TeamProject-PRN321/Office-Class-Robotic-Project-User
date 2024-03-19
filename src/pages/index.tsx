@@ -6,7 +6,6 @@ import { Button, Card, Tab, Typography } from '@mui/material'
 import { Launch } from 'mdi-material-ui'
 import LiveClasses from 'src/layouts/components/Dashboard/DashboardLiveClasses'
 import Teachers from 'src/layouts/components/Dashboard/DashboardTeachers'
-import ScheduleDashboard from 'src/layouts/components/Dashboard/DashboardSchedule'
 import { useRouter } from 'next/router'
 import { SubjectModel } from 'src/layouts/components/Subject/SubjectItems'
 import SchedulerTable from 'src/layouts/components/Subject/Scheduler'
@@ -18,6 +17,7 @@ import TabContext from '@mui/lab/TabContext'
 import CardContent from '@mui/material/CardContent'
 import NewClassForm from 'src/layouts/components/LiveClasses/AddNewClass/NewClassFormLiveClass'
 import NewClassFormHistoryClass from 'src/layouts/components/LiveClasses/AddNewClass/NewClassFormHistoryClass'
+import ScheduleDashboard from 'src/layouts/components/Dashboard/DashboardSchedule'
 
 const Dashboard = () => {
   const router = useRouter()

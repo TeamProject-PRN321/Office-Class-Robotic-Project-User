@@ -31,7 +31,7 @@ export default function LiveClassItems({ data }: LiveClassItemsProps) {
   }
 
   const handleUpGradeStudent = () => {
-    route.push('/students')
+    route.push('/students/' + data.className)
   }
 
   return (
