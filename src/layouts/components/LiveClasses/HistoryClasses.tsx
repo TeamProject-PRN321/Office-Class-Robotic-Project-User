@@ -126,10 +126,10 @@ export default function HistoryClasses({ data }: HistoryClassesProps) {
           toggleDrawer()
         }}
         disabled={
-          isAbletoCheckAttendance ||
-          moment().format('DD-MM-YYYY') !== data.dayStudy ||
-          moment(data.startTime, 'HH:mm:ss').isBefore(moment()) ||
-          moment(data.endTime, 'HH:mm:ss').isAfter(moment())
+          isAbletoCheckAttendance || moment().format('DD-MM-YYYY') !== data.dayStudy
+
+          // moment(data.startTime, 'HH:mm:ss').isBefore(moment()) ||
+          // moment(data.endTime, 'HH:mm:ss').isAfter(moment())
         }
       >
         Check Attendance
