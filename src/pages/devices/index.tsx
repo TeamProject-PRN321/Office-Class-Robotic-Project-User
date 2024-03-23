@@ -56,18 +56,6 @@ export default function App() {
               <Grid item>
                 <DeviceItems></DeviceItems>
               </Grid>
-              <Grid item>
-                <DeviceItems></DeviceItems>
-              </Grid>
-              <Grid item>
-                <DeviceItems></DeviceItems>
-              </Grid>
-              <Grid item>
-                <DeviceItems></DeviceItems>
-              </Grid>
-              <Grid item>
-                <DeviceItems></DeviceItems>
-              </Grid>
             </Grid>
           </TabPanel>
 
