@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Collapse,
   IconButton,
   Paper,
@@ -53,6 +54,7 @@ function Row(props: { row: DeviceCategoryModel }) {
                     <TableCell align='right'>Acquisition</TableCell>
                     <TableCell align='right'>LastRepair</TableCell>
                     <TableCell align='right'>Status</TableCell>
+                    <TableCell align='center'>EDIT</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -65,6 +67,13 @@ function Row(props: { row: DeviceCategoryModel }) {
                       <TableCell align='right'>{item.dateOfAcquisition}</TableCell>
                       <TableCell align='right'>{item.dateOfLastRepair}</TableCell>
                       <TableCell align='right'>{item.deviceStatus}</TableCell>
+                      <TableCell align='center'>
+                        <Box sx={{ '& button': { m: 5 } }}>
+                          <Button variant='outlined' size='small'>
+                            Edit
+                          </Button>
+                        </Box>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

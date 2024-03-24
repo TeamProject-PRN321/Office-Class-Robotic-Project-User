@@ -17,6 +17,7 @@ import { Settings } from 'src/@core/context/settingsContext'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown'
+import AddToCartDevice from 'src/@core/layouts/components/shared-components/AddToCartDevice'
 
 interface Props {
   hidden: boolean
@@ -72,6 +73,7 @@ const AppBarContent = (props: Props) => {
             />
           </Box>
         )} */}
+        <AddToCartDevice />
         <ModeToggler settings={settings} saveSettings={saveSettings} />
         <NotificationDropdown />
 

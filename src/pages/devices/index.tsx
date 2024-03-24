@@ -7,6 +7,8 @@ import LiveClassItems from 'src/layouts/components/LiveClasses/LiveClassesItem'
 import { SyntheticEvent, useState } from 'react'
 import DeviceItems from 'src/layouts/components/Devices/DeviceItem'
 import { ClassModel } from 'src/layouts/components/LiveClasses/AddNewClass/NewClassFormLiveClass'
+import useAuth from 'src/@core/hooks/useAuth'
+import DialogFormAddDevice from 'src/layouts/components/Devices/AddNewDevice/DialogFormAddDevice'
 
 export default function App() {
   // ** State
@@ -15,6 +17,11 @@ export default function App() {
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }
+
+  const authen = useAuth()
+  console.log(authen)
+  const role = authen.role
+  console.log(role)
 
   return (
     <Card>
@@ -36,7 +43,7 @@ export default function App() {
                 alignItems={'center'}
               >
                 <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}>Device</Typography>
-                <Button
+                {/* <Button
                   sx={{
                     backgroundColor: '#C4FCEF',
                     color: '#50bf62',
@@ -51,8 +58,10 @@ export default function App() {
                 >
                   <Plus sx={{ marginRight: '2px', fontSize: '16px' }}></Plus>
                   Add Device
-                </Button>
+                </Button> */}
+                {role === 'Admin' && <DialogFormAddDevice></DialogFormAddDevice>}
               </Grid>
+
               <Grid item>
                 <DeviceItems></DeviceItems>
               </Grid>

@@ -1,4 +1,5 @@
-import { Button, Card, Grid, Slider, Typography, styled } from '@mui/material'
+import { Add, Remove } from '@mui/icons-material'
+import { Button, Card, Grid, Slider, TextField, Typography, styled } from '@mui/material'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import useAuth from 'src/@core/hooks/useAuth'
@@ -70,10 +71,10 @@ export default function DeviceItems() {
   const route = useRouter()
   const axiosClient = useAxios()
   const authen = useAuth()
-  const id = authen.Id
   const role = authen.role
 
   const isAdmin = () => role === 'Admin'
+  const isTeacher = () => role === 'Teacher'
 
   const ViewDetailDeviceItems = (deviceCategoryId: string) => {
     route.push({
@@ -92,21 +93,85 @@ export default function DeviceItems() {
       }
     }
 
-    if (isAdmin()) {
-      fetchAllDeviceInCategory()
-    }
+    fetchAllDeviceInCategory()
   }, [])
 
+  const addToCart = (item: DeviceCategoryModel) => {
+    // Add to cart logic here
+    console.log(`Added to cart: ${item.deviceCategoryName}`)
+  }
+
+  const renderButton = (item: DeviceCategoryModel) => {
+    if (isAdmin()) {
+      return (
+        <Button
+          sx={{
+            backgroundColor: '#9155fd',
+            color: 'white',
+            ':hover': { backgroundColor: '#008BC5', color: 'white' }
+          }}
+          onClick={() => {
+            ViewDetailDeviceItems(item.deviceCategoryId)
+          }}
+        >
+          View details
+        </Button>
+      )
+    } else {
+      return (
+        <Grid container alignItems='center' spacing={1}>
+          <TextField
+            id='quantity'
+            type='number'
+            variant='outlined'
+            defaultValue={1}
+            size='small'
+            inputProps={{ min: 1 }}
+            sx={{
+              width: '80px'
+            }}
+          />
+          <Button
+            sx={{
+              backgroundColor: '#52af77',
+              color: 'white',
+              ':hover': { backgroundColor: '#006400', color: 'white' },
+              marginLeft: '10px',
+              width: '70%'
+            }}
+            onClick={() => {
+              addToCart(item)
+            }}
+          >
+            Add to cart
+          </Button>
+        </Grid>
+      )
+    }
+  }
+
   return (
-    <Card sx={{ padding: '15px', display: 'flex', gap: 3, flexDirection: 'column', width: '350px', height: 'auto' }}>
+    <Grid container spacing={2}>
       {deviceCategories.map((item, index) => (
-        <>
-          <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '26px' }} key={index}>
+        <Card
+          sx={{
+            padding: '15px',
+            display: 'flex',
+            gap: 3,
+            flexDirection: 'column',
+            width: '350px',
+            height: 'auto',
+            marginBottom: '15px',
+            marginRight: '15px'
+          }}
+          key={index}
+        >
+          <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '26px' }}>
             {item.deviceCategoryName}
           </Typography>
           <Typography
             sx={{
-              border: '1px solid #B0AAAE',
+              border: '2px solid #B0AAAE',
               borderRadius: '10px',
               width: 'fit-content',
               padding: '5px',
@@ -156,20 +221,9 @@ export default function DeviceItems() {
           >
             {item.quantityOfDeviceInStorageCanBorrow > 0 ? 'Status: In stock' : 'Status: Out of stock'}
           </Typography>
-          <Button
-            sx={{
-              backgroundColor: '#9155fd',
-              color: 'white',
-              ':hover': { backgroundColor: '#008BC5', color: 'white' }
-            }}
-            onClick={() => {
-              ViewDetailDeviceItems(item.deviceCategoryId)
-            }}
-          >
-            View details
-          </Button>
-        </>
+          {renderButton(item)}
+        </Card>
       ))}
-    </Card>
+    </Grid>
   )
 }
