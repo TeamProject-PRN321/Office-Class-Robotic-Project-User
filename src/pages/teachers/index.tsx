@@ -106,22 +106,6 @@ export default function App() {
                   alignItems={'center'}
                 >
                   <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}>List professors</Typography>
-                  <Button
-                    sx={{
-                      backgroundColor: '#C4FCEF',
-                      color: '#50bf62',
-                      textDecoration: 'underline',
-                      fontWeight: 'bold',
-                      fontSize: '13px',
-                      ':hover': {
-                        color: 'white',
-                        backgroundColor: '#0081CF'
-                      }
-                    }}
-                  >
-                    <ArrowTopRight sx={{ marginRight: '2px', fontSize: '16px' }}></ArrowTopRight>
-                    Contact
-                  </Button>
                 </Grid>
                 {teachers.map(item => {
                   return (
@@ -143,9 +127,7 @@ export default function App() {
                   width={'100%'}
                   alignItems={'center'}
                 >
-                  <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}>
-                    Report professor
-                  </Typography>
+                  <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}>Report teacher</Typography>
                   <Button
                     sx={{
                       backgroundColor: '#C4FCEF',
@@ -163,27 +145,13 @@ export default function App() {
                     Contact
                   </Button>
                 </Grid>
-                <Grid item>
-                  <ProfessorReport></ProfessorReport>
-                </Grid>
-                <Grid item>
-                  <ProfessorReport></ProfessorReport>
-                </Grid>
-                <Grid item>
-                  <ProfessorReport></ProfessorReport>
-                </Grid>
-                <Grid item>
-                  <ProfessorReport></ProfessorReport>
-                </Grid>
-                <Grid item>
-                  <ProfessorReport></ProfessorReport>
-                </Grid>
-                <Grid item>
-                  <ProfessorReport></ProfessorReport>
-                </Grid>
-                <Grid item>
-                  <ProfessorReport></ProfessorReport>
-                </Grid>
+                {teachers.map(item => {
+                  return (
+                    <Grid item key={item.teacherId}>
+                      <ProfessorItems teacherModel={item} onClickViewDetail={handleViewDetail}></ProfessorItems>
+                    </Grid>
+                  )
+                })}
               </Grid>
             </TabPanel>
           </CardContent>

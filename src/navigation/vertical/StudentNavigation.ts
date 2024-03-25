@@ -1,7 +1,7 @@
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
 import { CubeOutline, HumanMaleBoard, SchoolOutline } from 'mdi-material-ui'
-import { ReportOutlined, Schedule } from '@mui/icons-material'
+import { Schedule } from '@mui/icons-material'
 
 const StudentNavigation = (): VerticalNavItemsType => {
   return [
@@ -11,7 +11,7 @@ const StudentNavigation = (): VerticalNavItemsType => {
       path: '/schedule'
     },
     {
-      title: 'Subject',
+      title: 'Subjects',
       icon: Schedule,
       path: '/subjects'
     },
@@ -21,19 +21,10 @@ const StudentNavigation = (): VerticalNavItemsType => {
       path: '/teachers'
     },
     {
-      sectionTitle: 'Report'
-    },
-
-    // {
-    //   title: 'Report',
-    //   icon: ReportOutlined,
-    //   path: '/student-reports'
-    // },
-    {
       sectionTitle: 'Information'
     },
     {
-      title: 'Account',
+      title: 'About student',
       icon: SchoolOutline,
       path: '/account-settings'
     }

@@ -12,10 +12,10 @@ import DialogForm from './DialogForm'
 import { StudentListID } from 'src/pages/classes'
 import useAuth from 'src/@core/hooks/useAuth'
 import useAxios from 'src/@core/hooks/useAxios'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import moment from 'moment'
-import FilterClass from '../Filter/FilterClass'
 import ClassForAdmin from '../ClassForAdmin'
+import FilterClass from '../Filter/FilterClass'
 
 export interface NewClassModel {
   className: string
@@ -96,11 +96,14 @@ export interface Parent {
 }
 
 export default function NewClassFormLiveClass() {
-  const [startDate, setStartDate] = React.useState<string>(moment().startOf('week').toISOString())
-  const [endDate, setEndDate] = React.useState<string>(moment().endOf('week').toISOString())
+  const [startDate, setStartDate] = useState<string>(moment().startOf('week').toISOString())
+  const [endDate, setEndDate] = useState<string>(moment().endOf('week').toISOString())
 
-  const [classes, setClasses] = React.useState<ClassModel[]>([])
-  const [classForAdmin, setClassForAdmin] = React.useState<ClassForAdminModel[]>([])
+  const [classes, setClasses] = useState<ClassModel[]>([])
+  const [classForAdmin, setClassForAdmin] = useState<ClassForAdminModel[]>([])
+
+  const [className, setClassName] = useState<string>('')
+
   const axiosClient = useAxios()
 
   const authen = useAuth()
@@ -173,7 +176,15 @@ export default function NewClassFormLiveClass() {
   return (
     <Grid container direction={'row'} spacing={4}>
       {!isAdmin() && (
-        <FilterClass startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} />
+        <FilterClass
+          classes={className}
+          listClasses={classes}
+          startDate={startDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          setStartDate={setStartDate}
+          setClassName={setClassName}
+        />
       )}
       <Grid
         item
@@ -187,11 +198,13 @@ export default function NewClassFormLiveClass() {
         {role === 'Admin' && <DialogForm></DialogForm>}
       </Grid>
 
-      {classes.map((item, index) => (
-        <Grid item xl={3} lg={3} md={3} xs={6} sm={6} key={index}>
-          <LiveClassItems data={item}></LiveClassItems>
-        </Grid>
-      ))}
+      {classes
+        .filter(x => x.className === className || !className)
+        .map((item, index) => (
+          <Grid item xl={3} lg={3} md={3} xs={6} sm={6} key={index}>
+            <LiveClassItems data={item}></LiveClassItems>
+          </Grid>
+        ))}
       {classForAdmin.map((item, index) => (
         <Grid item xl={3} lg={3} md={3} xs={6} sm={6} key={index}>
           <ClassForAdmin data={item}></ClassForAdmin>

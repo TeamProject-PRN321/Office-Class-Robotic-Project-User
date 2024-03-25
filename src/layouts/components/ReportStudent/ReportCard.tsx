@@ -77,6 +77,7 @@ const ReportCard = (prop: ReportCardProperties) => {
 
   const handleGetAttendance = async () => {
     try {
+      if (!prop.studentId) return
       const data = await axios.call(
         'get',
         'https://localhost:7254/api/v1/student/get-all-studentsAttendance/' + prop.studentId
@@ -90,6 +91,7 @@ const ReportCard = (prop: ReportCardProperties) => {
 
   const handleGetGrade = async () => {
     try {
+      if (!prop.studentId) return
       const data = await axios.call(
         'get',
         'https://localhost:7254/api/v1/student/get-all-studentsGrades/' + prop.studentId
@@ -133,10 +135,18 @@ const ReportCard = (prop: ReportCardProperties) => {
                         <TableRow key={index}>
                           <TableCell
                             sx={{
+                              ...(changeClassName === reportAtten.className && {
+                                fontWeight: 'bold',
+                                fontSize: '15px',
+                                background: '#C5DBC8',
+                                textAlign: 'center'
+                              }),
                               ':hover': {
                                 fontWeight: 'bold',
-                                fontSize: '15px'
-                              }
+                                fontSize: '15px',
+                                textAlign: 'center'
+                              },
+                              textAlign: 'center'
                             }}
                             onClick={() => {
                               setChangeClassName(reportAtten.className)
@@ -220,10 +230,18 @@ const ReportCard = (prop: ReportCardProperties) => {
                         <TableRow key={index}>
                           <TableCell
                             sx={{
+                              ...(changeClassName === reportAtten.className && {
+                                fontWeight: 'bold',
+                                fontSize: '15px',
+                                background: '#C5DBC8',
+                                textAlign: 'center'
+                              }),
                               ':hover': {
                                 fontWeight: 'bold',
-                                fontSize: '15px'
-                              }
+                                fontSize: '15px',
+                                textAlign: 'center'
+                              },
+                              textAlign: 'center'
                             }}
                             onClick={() => {
                               setChangeClassName(reportAtten.className)
@@ -246,29 +264,43 @@ const ReportCard = (prop: ReportCardProperties) => {
               >
                 <TableHead>
                   <TableRow>
+                    <TableCell>Subject</TableCell>
                     <TableCell>Check 15p</TableCell>
                     <TableCell>Check 1 period</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {grade.map(reportClasses =>
-                    reportClasses.grades
+                  {grade
+                    .filter(value => value.className === changeClassName)
+                    .map((reportClasses, index) => {
+                      let rowData: {
+                        [key: string]: number
+                      } = {}
+                      reportClasses.grades.map(value => {
+                        rowData = {
+                          ...rowData,
+                          ...value
+                        }
+                      })
+
+                      // return (
+                      //   rowData
 
                       //.filter(check => check === changeClassName)
                       //   .at(0)
                       // ?.attendanceDetails.sort((asc, after) => {
                       //   return moment(asc.dateStudy).isAfter(after.dateStudy) ? 0 : -1
                       // })
-                      .map((value, index) => {
-                        return (
-                          <TableRow key={index}>
-                            {/* <TableCell>{grade.map(data => data.subjectName)}</TableCell> */}
-                            <TableCell>{value['Kiem tra 15p']} </TableCell>
-                            <TableCell>{value['Kiem tra 1T']}</TableCell>
-                          </TableRow>
-                        )
-                      })
-                  )}
+                      // .map((value, index) => {
+
+                      return (
+                        <TableRow key={index}>
+                          <TableCell>{reportClasses.subjectName}</TableCell>
+                          <TableCell>{rowData['Kiem tra 15p']} </TableCell>
+                          <TableCell>{rowData['Kiem tra 1T']}</TableCell>
+                        </TableRow>
+                      )
+                    })}
                 </TableBody>
               </Table>
             </Box>

@@ -26,6 +26,8 @@ export default function NewClassFormHistoryClass() {
 
   const [classes, setClasses] = React.useState<ClassModel[]>([])
   const [classForAdmin, setClassForAdmin] = React.useState<ClassForAdminModel[]>([])
+  const [className, setClassName] = React.useState<string>('')
+
   const axiosClient = useAxios()
 
   const authen = useAuth()
@@ -72,7 +74,15 @@ export default function NewClassFormHistoryClass() {
 
   return (
     <Grid container direction={'row'} spacing={4}>
-      <FilterClass startDate={startDate} endDate={endDate} setEndDate={setEndDate} setStartDate={setStartDate} />
+      <FilterClass
+        classes={className}
+        listClasses={classes}
+        startDate={startDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        setStartDate={setStartDate}
+        setClassName={setClassName}
+      />
       <Grid
         item
         display={'flex'}
@@ -84,13 +94,15 @@ export default function NewClassFormHistoryClass() {
         <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}> Classes</Typography>
         {role === 'Admin' && <DialogForm></DialogForm>}
       </Grid>
-      {classes.map((item, index) => {
-        return (
-          <Grid item xl={3} lg={3} md={3} xs={6} sm={6} key={index}>
-            {item.classWasCheckedAttendant ? <HistoryClassesReport data={item} /> : <HistoryClasses data={item} />}
-          </Grid>
-        )
-      })}
+      {classes
+        .filter(x => x.className === className || !className)
+        .map((item, index) => {
+          return (
+            <Grid item xl={3} lg={3} md={3} xs={6} sm={6} key={index}>
+              {item.classWasCheckedAttendant ? <HistoryClassesReport data={item} /> : <HistoryClasses data={item} />}
+            </Grid>
+          )
+        })}
       {classForAdmin.map((item, index) => (
         <Grid item xl={3} lg={3} md={3} xs={6} sm={6} key={index}>
           <ClassForAdmin data={item}></ClassForAdmin>

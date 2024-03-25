@@ -156,6 +156,7 @@ export default function DialogFormAddDevice() {
             label='Description'
             id='outlined-start-adornment'
             placeholder='Please enter description for device'
+            multiline
             value={deviceDescription}
             onChange={e => {
               setDeviceDescription(e.target.value)
