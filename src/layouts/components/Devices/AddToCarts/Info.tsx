@@ -23,7 +23,7 @@ const products = [
   },
   {
     deviceCategoryName: 'Landing page template',
-    deviceCategoryId: '654',
+    deviceCategoryId: '7A446C28-2870-42DB-B867-C2FA79D5EEBC',
     quantityOfDeviceInStorageCanBorrow: 9
   }
 ]
@@ -36,7 +36,7 @@ export default function Info({ totalDeviceBorrow }: InfoProps) {
   return (
     <React.Fragment>
       <Typography variant='subtitle2' color='text.secondary'>
-        Total Device
+        Total Device Borrow
       </Typography>
       <Typography variant='h4' gutterBottom>
         {totalDeviceBorrow}
@@ -44,7 +44,11 @@ export default function Info({ totalDeviceBorrow }: InfoProps) {
       <List disablePadding>
         {products.map(product => (
           <ListItem key={product.deviceCategoryName} sx={{ py: 1, px: 0 }}>
-            <ListItemText sx={{ mr: 2 }} primary={product.deviceCategoryName} secondary={product.deviceCategoryId} />
+            <ListItemText
+              sx={{ mr: 2 }}
+              primary={product.deviceCategoryName}
+              secondary={`Device Id: ${product.deviceCategoryId}`}
+            />
             <Typography variant='body1' fontWeight='medium'>
               {product.quantityOfDeviceInStorageCanBorrow}
             </Typography>
