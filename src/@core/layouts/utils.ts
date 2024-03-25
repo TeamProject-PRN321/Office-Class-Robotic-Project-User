@@ -17,3 +17,5 @@ export const handleURLQueries = (router: NextRouter, path: string | undefined): 
 
   return false
 }
+
+export const PHONE_REGEX = /(03|05|07|08|09|01|3|5|7|8|9|1[2|6|8|9])+([0-9]{8})\b/

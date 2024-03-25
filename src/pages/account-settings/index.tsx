@@ -68,7 +68,7 @@ export interface Parent {
 
 const AccountSettings = () => {
   // ** State
-  const [value, setValue] = useState<string>('new-account')
+  const [value, setValue] = useState<string>('new-student-account')
 
   const authen = useAuth()
   const role = authen.role
@@ -76,7 +76,7 @@ const AccountSettings = () => {
   const isAdmin = () => role === 'Admin'
 
   useEffect(() => {
-    if (role === 'Admin') setValue('new-account')
+    if (role === 'Admin') setValue('new-student-account')
     else setValue('info')
   }, [role])
 
@@ -92,17 +92,38 @@ const AccountSettings = () => {
           aria-label='account-settings tabs'
           sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
         >
-          {isAdmin() && (
+          {isAdmin() && [
             <Tab
-              value='new-account'
+              key='new-student-account'
+              value='new-student-account'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <AccountOutline />
-                  <TabName>New Account</TabName>
+                  <TabName>New Student Account</TabName>
+                </Box>
+              }
+            />,
+            <Tab
+              key='new-parent-account'
+              value='new-parent-account'
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <AccountOutline />
+                  <TabName>New Parent Account</TabName>
+                </Box>
+              }
+            />,
+            <Tab
+              key='new-teacher-account'
+              value='new-teacher-account'
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <AccountOutline />
+                  <TabName>New Teacher Account</TabName>
                 </Box>
               }
             />
-          )}
+          ]}
 
           {/* <Tab
             value='security'
@@ -126,8 +147,14 @@ const AccountSettings = () => {
           )}
         </TabList>
 
-        <TabPanel sx={{ p: 0 }} value='new-account'>
-          <TabAccount />
+        <TabPanel sx={{ p: 0 }} value='new-student-account'>
+          <TabAccount value={value} />
+        </TabPanel>
+        <TabPanel sx={{ p: 0 }} value='new-parent-account'>
+          <TabAccount value={value} />
+        </TabPanel>
+        <TabPanel sx={{ p: 0 }} value='new-teacher-account'>
+          <TabAccount value={value} />
         </TabPanel>
 
         {/* <TabPanel sx={{ p: 0 }} value='security'>

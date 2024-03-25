@@ -1,21 +1,18 @@
 // ** React Imports
-import { useState, ElementType, ChangeEvent, forwardRef } from 'react'
+import { useState, ElementType, ChangeEvent, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Select from '@mui/material/Select'
 import { styled } from '@mui/material/styles'
-import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import InputLabel from '@mui/material/InputLabel'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import Button, { ButtonProps } from '@mui/material/Button'
 
 // ** Icons Imports
-import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
+import { Autocomplete, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup } from '@mui/material'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import DatePicker from 'react-datepicker'
 import useAxios from 'src/@core/hooks/useAxios'
@@ -23,10 +20,9 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import moment from 'moment'
 import { ErrorModel } from 'src/layouts/components/Subject/AddSubject/NewSubjectForm'
-
-const CustomInput = forwardRef((props, ref) => {
-  return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
-})
+import * as Yup from 'yup'
+import { PHONE_REGEX } from 'src/@core/layouts/utils'
+import { Field, FieldProps, Form, Formik } from 'formik'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 120,
@@ -61,9 +57,11 @@ export interface ProfileModel {
   gender: string
   address: string
   photoUrl: string
+  role: string
   studentId?: string
   parent?: ProfileModel
   parentID?: string
+  photo: any | null
 }
 
 const initial = {
@@ -74,18 +72,61 @@ const initial = {
   dateOfBirth: '',
   gender: 'male',
   address: '',
-  photoUrl: ''
+  photoUrl: '',
+  photo: null
 } as ProfileModel
 
-const TabAccount = () => {
+export interface ParentModel {
+  id: string
+  name: string
+  address: string
+  phone: string
+  birthday: string
+  created: string
+}
+
+const validationSchema = Yup.object<ProfileModel>({
+  userName: Yup.string().required('This field is required.'),
+  fullName: Yup.string().required('This field is required.'),
+  email: Yup.string().required('This field is required.').email('This field is invalid.'),
+  phoneNumber: Yup.string().required('This field is required.').matches(PHONE_REGEX, 'Phone is invalid'),
+  dateOfBirth: Yup.string()
+    .test('range', 'Age must from 18 to 80', value => {
+      return (
+        moment().get('years') - moment(value).get('years') <= 80 &&
+        moment().get('years') - moment(value).get('years') >= 18
+      )
+    })
+    .required('This field is required.'),
+  gender: Yup.string().required('This field is required.'),
+  address: Yup.string().required('This field is required.'),
+  parentID: Yup.string().when('role', {
+    is: (value: string) => value === 'student',
+    then: () => Yup.string().required('Parent ID is required for students'),
+    otherwise: () => Yup.string() // Allow null for non-students
+  }),
+  photo: Yup.mixed().required('This field is required.')
+})
+
+const TabAccount = ({ value }: { value: string }) => {
   // ** State
   const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
   const [imgData, setImgData] = useState<any>()
-  const [date, setDate] = useState<Date | null | undefined>(moment().toDate())
-  const [profile, setProfile] = useState<ProfileModel>(initial)
-  const [role, setRole] = useState<string>('Student')
+  const [parents, setParents] = useState<ParentModel[]>([])
 
   const axiosClient = useAxios()
+
+  useEffect(() => {
+    const fetchAllParent = async () => {
+      try {
+        const response = await axiosClient.call('get', '/api/v1/parent/get-all-parent')
+
+        setParents(response as ParentModel[])
+      } catch (error) {}
+    }
+
+    fetchAllParent()
+  }, [value])
 
   const handleUploadFile = async () => {
     try {
@@ -100,19 +141,26 @@ const TabAccount = () => {
     }
   }
 
-  const handleSubmit = () => {
-    switch (role) {
-      case 'Student':
-        submit('/Account/register-student-account', profile)
-        break
-      case 'Admin':
-        submit('/Account/register-admin-account', profile)
-        break
-      case 'Teacher':
-        submit('/Account/register-teacher-account', profile)
-        break
-      default:
-        break
+  const handleSubmit = async (data: any) => {
+    try {
+      switch (value) {
+        case 'new-student-account':
+          await submit('/Account/register-student-account', data)
+          break
+        case 'new-admin-account':
+          await submit('/Account/register-admin-account', data)
+          break
+        case 'new-parent-account':
+          await submit('/Account/register-parents-account', data)
+          break
+        case 'new-teacher-account':
+          await submit('/Account/register-teacher-account', data)
+          break
+        default:
+          break
+      }
+    } catch (error) {
+      throw error
     }
   }
 
@@ -122,7 +170,7 @@ const TabAccount = () => {
       await axiosClient.call('post', url, {
         ...data,
         photoUrl: imgUrl,
-        dateOfBirth: moment(date).format('YYYY-MM-DD')
+        dateOfBirth: moment(data.dateOfBirth).format('YYYY-MM-DD')
       } as ProfileModel)
       toast.success('Created Successfully!!!')
     } catch (error: any) {
@@ -131,149 +179,260 @@ const TabAccount = () => {
       if (title) {
         toast.error(title)
       }
+
+      throw error
     }
   }
 
   return (
     <CardContent>
-      <form>
-        <Grid container spacing={7}>
-          <Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <ImgStyled src={imgSrc} alt='Profile Pic' />
-              <Box>
-                <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
-                  Upload New Photo
-                  <input
-                    hidden
-                    type='file'
-                    onChange={(file: ChangeEvent) => {
-                      const reader = new FileReader()
-                      const { files } = file.target as HTMLInputElement
-                      if (!files) return
+      <Formik<ProfileModel>
+        initialValues={{
+          ...initial,
+          photo: null,
+          ...(value === 'new-student-account' && {
+            role: 'student',
+            parentID: ''
+          })
+        }}
+        validationSchema={validationSchema}
+        onSubmit={async (values, { resetForm }) => {
+          try {
+            console.log('submit', values)
+            await handleSubmit(values)
+            resetForm()
+          } catch (error) {}
+        }}
+      >
+        {({}) => (
+          <Form>
+            <Grid container spacing={7}>
+              <Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
+                <Field name='photo'>
+                  {({ field, meta, form }: FieldProps) => (
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <ImgStyled src={!!field.value ? imgSrc : '/images/avatars/1.png'} alt='Profile Pic' />
+                      <Box>
+                        <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
+                          Upload New Photo
+                          <input
+                            hidden
+                            type='file'
+                            onChange={(file: ChangeEvent) => {
+                              const reader = new FileReader()
+                              const { files } = file.target as HTMLInputElement
+                              if (!files) return
 
-                      setImgData(files[0])
-                      if (files && files.length !== 0) {
-                        reader.onload = () => setImgSrc(reader.result as string)
+                              setImgData(files[0])
+                              form.setFieldValue(field.name, files[0])
+                              if (files && files.length !== 0) {
+                                reader.onload = () => setImgSrc(reader.result as string)
 
-                        reader.readAsDataURL(files[0])
-                      }
-                    }}
-                    accept='image/png, image/jpeg'
-                    id='account-settings-upload-image'
-                    value={profile.photoUrl}
-                  />
-                </ButtonStyled>
-                <ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc('/images/avatars/1.png')}>
-                  Reset
-                </ResetButtonStyled>
-                <Typography variant='body2' sx={{ marginTop: 5 }}>
-                  Allowed PNG or JPEG. Max size of 800K.
-                </Typography>
-              </Box>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label='Username'
-              value={profile.userName}
-              onChange={e =>
-                setProfile({
-                  ...profile,
-                  userName: e.target.value
-                })
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label='Name'
-              value={profile.fullName}
-              onChange={e =>
-                setProfile({
-                  ...profile,
-                  fullName: e.target.value
-                })
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              type='email'
-              label='Email'
-              value={profile.email}
-              onChange={e =>
-                setProfile({
-                  ...profile,
-                  email: e.target.value
-                })
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label='Phone'
-              value={profile.phoneNumber}
-              onChange={e =>
-                setProfile({
-                  ...profile,
-                  phoneNumber: e.target.value
-                })
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label='Address'
-              value={profile.address}
-              onChange={e =>
-                setProfile({
-                  ...profile,
-                  address: e.target.value
-                })
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <DatePickerWrapper>
-              <DatePicker
-                selected={date}
-                showYearDropdown
-                showMonthDropdown
-                id='account-settings-id'
-                placeholderText='YYYY-MM-DD'
-                customInput={<CustomInput />}
-                onChange={(date: Date | null) => setDate(date)}
-              />
-            </DatePickerWrapper>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl>
-              <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
-              <RadioGroup
-                row
-                defaultValue='male'
-                aria-label='gender'
-                name='account-settings-info-radio'
-                value={profile.gender}
-                onChange={e =>
-                  setProfile({
-                    ...profile,
-                    gender: e.currentTarget.value
-                  })
-                }
-              >
-                <FormControlLabel value='male' label='Male' control={<Radio />} />
-                <FormControlLabel value='female' label='Female' control={<Radio />} />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-          {/* <Grid item xs={12} sm={6}>
+                                reader.readAsDataURL(files[0])
+                              }
+                            }}
+                            accept='image/png, image/jpeg'
+                            id='account-settings-upload-image'
+                            value={''}
+                          />
+                        </ButtonStyled>
+                        <ResetButtonStyled
+                          color='error'
+                          variant='outlined'
+                          onClick={() => {
+                            setImgSrc('/images/avatars/1.png')
+                            form.setFieldValue(field.name, '/images/avatars/1.png')
+                          }}
+                        >
+                          Reset
+                        </ResetButtonStyled>
+                        <Typography variant='body2' sx={{ marginTop: 5 }}>
+                          Allowed PNG or JPEG. Max size of 800K.
+                        </Typography>
+                        <FormHelperText error={meta.touched && !!meta.error}>
+                          {meta.touched && meta.error ? meta.error : ''}
+                        </FormHelperText>
+                      </Box>
+                    </Box>
+                  )}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Field name='userName'>
+                  {({ field, meta }: FieldProps) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label='Username'
+                      error={meta.touched && !!meta.error}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
+                    />
+                  )}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Field name='fullName'>
+                  {({ field, meta }: FieldProps) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label='Name'
+                      error={meta.touched && !!meta.error}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
+                    />
+                  )}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Field name='email'>
+                  {({ field, meta }: FieldProps) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label='Email'
+                      error={meta.touched && !!meta.error}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
+                    />
+                  )}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Field name='phoneNumber'>
+                  {({ field, meta }: FieldProps) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label='Phone'
+                      error={meta.touched && !!meta.error}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
+                    />
+                  )}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Field name='address'>
+                  {({ field, meta }: FieldProps) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label='Address'
+                      error={meta.touched && !!meta.error}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
+                    />
+                  )}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Field name='dateOfBirth'>
+                  {({ field, meta, form }: FieldProps) => (
+                    <DatePickerWrapper>
+                      <DatePicker
+                        value={field.value}
+                        selected={form.values[field.name] ? moment(form.values[field.name]).toDate() : null}
+                        minDate={moment().subtract(80, 'year').startOf('year').toDate()}
+                        maxDate={moment().subtract(18, 'year').endOf('year').toDate()}
+                        showYearDropdown
+                        showMonthDropdown
+                        autoComplete='off'
+                        placeholderText='YYYY-MM-DD'
+                        dateFormat={'yyyy-MM-dd'}
+                        customInput={
+                          <TextField
+                            label='Birth Date'
+                            fullWidth
+                            error={meta.touched && !!meta.error}
+                            helperText={meta.touched && meta.error ? meta.error : ''}
+                          />
+                        }
+                        onChange={(date: Date | null) => {
+                          if (date) {
+                            form.setFieldValue(field.name, date)
+                          } else {
+                            form.setFieldValue(field.name, '')
+                          }
+                        }}
+                      />
+                    </DatePickerWrapper>
+                  )}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Field name='gender'>
+                  {({ field, meta, form }: FieldProps) => (
+                    <FormControl>
+                      <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
+                      <RadioGroup
+                        {...field}
+                        row
+                        defaultValue='male'
+                        aria-label='gender'
+                        name='account-settings-info-radio'
+                        value={field.value}
+                        onChange={e => {
+                          form.setFieldValue(field.name, e.currentTarget.value)
+                        }}
+                      >
+                        <FormControlLabel value='male' label='Male' control={<Radio />} />
+                        <FormControlLabel value='female' label='Female' control={<Radio />} />
+                      </RadioGroup>
+                      <FormHelperText error={meta.touched && !!meta.error}>
+                        {meta.touched && meta.error ? meta.error : ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                </Field>
+              </Grid>
+
+              {value === 'new-student-account' && (
+                <Field name='parentID'>
+                  {({ field, meta, form }: FieldProps) => (
+                    <Grid item lg={12} xl={12} md={12} xs={12} sm={6}>
+                      <FormControl fullWidth>
+                        <Autocomplete
+                          fullWidth
+                          getOptionLabel={option => option.name}
+                          renderInput={params => (
+                            <TextField
+                              {...field}
+                              {...params}
+                              label='Parent'
+                              error={meta.touched && !!meta.error}
+                              helperText={meta.touched && meta.error ? meta.error : ''}
+                            />
+                          )}
+                          options={parents}
+                          value={parents.filter(p => p.id === field.value).at(0)}
+                          onChange={(e, value) => {
+                            form.setFieldValue(field.name, value?.id || '')
+                          }}
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    // <FormControl>
+                    //   <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
+                    //   <RadioGroup
+                    //     {...field}
+                    //     row
+                    //     defaultValue='male'
+                    //     aria-label='gender'
+                    //     name='account-settings-info-radio'
+                    //     value={field.value}
+                    //     onChange={e => {
+                    //       form.setFieldValue(field.name, e.currentTarget.value)
+                    //     }}
+                    //   >
+                    //     <FormControlLabel value='male' label='Male' control={<Radio />} />
+                    //     <FormControlLabel value='female' label='Female' control={<Radio />} />
+                    //   </RadioGroup>
+                    //   <FormHelperText error={meta.touched && !!meta.error}>
+                    //     {meta.touched && meta.error ? meta.error : ''}
+                    //   </FormHelperText>
+                    // </FormControl>
+                  )}
+                </Field>
+              )}
+              {/* <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
               <Select label='Status' defaultValue='active'>
@@ -283,28 +442,18 @@ const TabAccount = () => {
               </Select>
             </FormControl>
           </Grid> */}
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Role</InputLabel>
-              <Select label='Role' defaultValue='Student' value={role} onChange={e => setRole(e.target?.value)}>
-                <MenuItem value='Admin'>Admin</MenuItem>
-                <MenuItem value='Teacher'>Teacher</MenuItem>
-                <MenuItem value='Student'>Student</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
 
-          {/* {role === 'Student' && (
+              {/* {role === 'Student' && (
             <Grid item >
               <Autocomplete />
             </Grid>
           )} */}
 
-          {/* <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
             <TextField fullWidth label='Company' placeholder='ABC Pvt. Ltd.' defaultValue='ABC Pvt. Ltd.' />
           </Grid> */}
 
-          {/* {openAlert ? (
+              {/* {openAlert ? (
             <Grid item xs={12} sx={{ mb: 3 }}>
               <Alert
                 severity='warning'
@@ -322,13 +471,15 @@ const TabAccount = () => {
               </Alert>
             </Grid>
           ) : null} */}
-          <Grid item xs={12}>
-            <Button variant='contained' sx={{ marginRight: 3.5 }} onClick={handleSubmit}>
-              Save Changes
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
+              <Grid item xs={12}>
+                <Button variant='contained' sx={{ marginRight: 3.5 }} type='submit'>
+                  Save Changes
+                </Button>
+              </Grid>
+            </Grid>
+          </Form>
+        )}
+      </Formik>
     </CardContent>
   )
 }
