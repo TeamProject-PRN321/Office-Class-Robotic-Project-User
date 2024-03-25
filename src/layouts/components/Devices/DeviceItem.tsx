@@ -1,7 +1,7 @@
-import { Add, Remove } from '@mui/icons-material'
 import { Button, Card, Grid, Slider, TextField, Typography, styled } from '@mui/material'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+import { toast } from 'react-toastify'
 import useAuth from 'src/@core/hooks/useAuth'
 import useAxios from 'src/@core/hooks/useAxios'
 
@@ -67,6 +67,8 @@ const API_GET_ALL_DEVICE_CATEGORY = '/api/v1/device'
 
 export default function DeviceItems() {
   const [deviceCategories, setDeviceCategries] = React.useState<DeviceCategoryModel[]>([])
+  const [quantity, setQuantity] = React.useState<number>(1)
+  const [cart, setCart] = React.useState([])
 
   const route = useRouter()
   const axiosClient = useAxios()
@@ -96,9 +98,23 @@ export default function DeviceItems() {
     fetchAllDeviceInCategory()
   }, [])
 
-  const addToCart = (item: DeviceCategoryModel) => {
-    // Add to cart logic here
-    console.log(`Added to cart: ${item.deviceCategoryName}`)
+  const addToCart = (item: DeviceCategoryModel, quantity: number) => {
+    if (quantity <= 0) {
+      toast.error('Invalid quantity')
+
+      return
+    }
+    if (quantity > item.quantityOfDeviceInStorageCanBorrow) {
+      toast.error('Vượt quá số lượng có sẵn')
+
+      return
+    }
+
+    //console.log(`Added to cart: ${item.deviceCategoryName}`)
+    const updatedCart = [...cart, { ...item, quantity }]
+    setCart(updatedCart)
+
+    toast.success('Device đã được thêm vào giỏ hàng')
   }
 
   const renderButton = (item: DeviceCategoryModel) => {
@@ -124,7 +140,8 @@ export default function DeviceItems() {
             id='quantity'
             type='number'
             variant='outlined'
-            defaultValue={1}
+            value={quantity}
+            onChange={e => setQuantity(Number(e.target.value))}
             size='small'
             inputProps={{ min: 1 }}
             sx={{
@@ -137,10 +154,10 @@ export default function DeviceItems() {
               color: 'white',
               ':hover': { backgroundColor: '#006400', color: 'white' },
               marginLeft: '10px',
-              width: '70%'
+              width: '72%'
             }}
             onClick={() => {
-              addToCart(item)
+              addToCart(item, quantity)
             }}
           >
             Add to cart

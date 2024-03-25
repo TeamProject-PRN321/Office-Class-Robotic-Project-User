@@ -23,7 +23,7 @@ import ToggleColorMode from './ToggleColorMode'
 import InfoMobile from './InfoMobile'
 import themeConfig from 'src/configs/themeConfig'
 
-const steps = ['Shipping address', 'Payment details', 'Review your order']
+const steps = ['Information teacher', 'Review your borrow device']
 
 const HeaderTitle = styled(Typography)<TypographyProps>(({ theme }) => ({
   fontWeight: 600,
@@ -175,7 +175,7 @@ export default function Checkout() {
               maxWidth: 500
             }}
           >
-            <Info totalPrice={activeStep >= 2 ? '$144.97' : '$134.98'} />
+            <Info totalDeviceBorrow={activeStep >= 0 ? 21 : 23} />
           </Box>
         </Grid>
         <Grid

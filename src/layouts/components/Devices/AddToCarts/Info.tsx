@@ -7,46 +7,46 @@ import Typography from '@mui/material/Typography'
 
 const products = [
   {
-    name: 'Professional plan',
-    desc: 'Monthly subscription',
-    price: '$15.00'
+    deviceCategoryName: 'Professional plan',
+    deviceCategoryId: '123',
+    quantityOfDeviceInStorageCanBorrow: 5
   },
   {
-    name: 'Dedicated support',
-    desc: 'Included in the Professional plan',
-    price: 'Free'
+    deviceCategoryName: 'Dedicated support',
+    deviceCategoryId: '789',
+    quantityOfDeviceInStorageCanBorrow: 1
   },
   {
-    name: 'Hardware',
-    desc: 'Devices needed for development',
-    price: '$69.99'
+    deviceCategoryName: 'Hardware',
+    deviceCategoryId: '788',
+    quantityOfDeviceInStorageCanBorrow: 6
   },
   {
-    name: 'Landing page template',
-    desc: 'License',
-    price: '$49.99'
+    deviceCategoryName: 'Landing page template',
+    deviceCategoryId: '654',
+    quantityOfDeviceInStorageCanBorrow: 9
   }
 ]
 
 interface InfoProps {
-  totalPrice: string
+  totalDeviceBorrow: number
 }
 
-export default function Info({ totalPrice }: InfoProps) {
+export default function Info({ totalDeviceBorrow }: InfoProps) {
   return (
     <React.Fragment>
       <Typography variant='subtitle2' color='text.secondary'>
-        Total
+        Total Device
       </Typography>
       <Typography variant='h4' gutterBottom>
-        {totalPrice}
+        {totalDeviceBorrow}
       </Typography>
       <List disablePadding>
         {products.map(product => (
-          <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
-            <ListItemText sx={{ mr: 2 }} primary={product.name} secondary={product.desc} />
+          <ListItem key={product.deviceCategoryName} sx={{ py: 1, px: 0 }}>
+            <ListItemText sx={{ mr: 2 }} primary={product.deviceCategoryName} secondary={product.deviceCategoryId} />
             <Typography variant='body1' fontWeight='medium'>
-              {product.price}
+              {product.quantityOfDeviceInStorageCanBorrow}
             </Typography>
           </ListItem>
         ))}
