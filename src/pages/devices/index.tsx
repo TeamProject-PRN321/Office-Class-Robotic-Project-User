@@ -28,8 +28,7 @@ export default function App() {
       <TabContext value={value}>
         <TabList onChange={handleChange} aria-label='card navigation example'>
           <Tab sx={{ fontWeight: 'bold' }} value='1' label='Device' />
-          <Tab sx={{ fontWeight: 'bold' }} value='2' label='Smart device' />
-          <Tab sx={{ fontWeight: 'bold' }} value='2' label='Class items' />
+          <Tab sx={{ fontWeight: 'bold' }} value='2' label='Rental history' />
         </TabList>
         <CardContent>
           <TabPanel value='1' sx={{ p: 0 }}>
@@ -81,58 +80,6 @@ export default function App() {
                 <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}>
                   History DeviceItems
                 </Typography>
-                <Button
-                  sx={{
-                    backgroundColor: '#C4FCEF',
-                    color: '#50bf62',
-                    fontWeight: 'bold',
-                    fontSize: '13px',
-                    textDecoration: 'underline',
-                    ':hover': {
-                      color: 'white',
-                      backgroundColor: '#0081CF'
-                    }
-                  }}
-                >
-                  <Plus sx={{ marginRight: '2px', fontSize: '16px' }}></Plus>
-                  Add Device
-                </Button>
-              </Grid>
-              <Grid item>
-                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
-              </Grid>
-              <Grid item>
-                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
-              </Grid>
-              <Grid item>
-                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
-              </Grid>
-              <Grid item>
-                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
-              </Grid>
-              <Grid item>
-                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
-              </Grid>
-              <Grid item>
-                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
-              </Grid>
-              <Grid item>
-                <LiveClassItems data={{} as ClassModel}></LiveClassItems>
-              </Grid>
-            </Grid>
-          </TabPanel>
-
-          <TabPanel value='3' sx={{ p: 0 }}>
-            <Grid container direction={'row'} spacing={4}>
-              <Grid
-                item
-                display={'flex'}
-                flexWrap={'wrap'}
-                justifyContent={'space-between'}
-                width={'100%'}
-                alignItems={'center'}
-              >
-                <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}>Smart device</Typography>
                 <Button
                   sx={{
                     backgroundColor: '#C4FCEF',

@@ -50,7 +50,7 @@ const StudentLists = () => {
   }
 
   const handleDownload = async () => {
-    const isConfirmed = window.confirm('Bạn có muốn tải về danh sách học sinh trong lớp này?')
+    const isConfirmed = window.confirm('Do you want to download the list of students in this class ?')
     if (isConfirmed) {
       try {
         axios
@@ -77,16 +77,19 @@ const StudentLists = () => {
   }
 
   const handleUploadFileStudentGrade = async () => {
-    try {
-      const formData = new FormData()
-      formData.append('file', file)
-      await axios.post('https://localhost:7254/api/v1/grade/api/upload/excel', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
+    const isConfirmed = window.confirm('Are you sure to upload scores in this class ?')
+    if (isConfirmed) {
+      try {
+        const formData = new FormData()
+        formData.append('file', file)
+        await axios.post('https://localhost:7254/api/v1/grade/api/upload/excel', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        })
 
-      toast.success('Upload score successfully.')
-    } catch (error) {
-      console.log(error)
+        toast.success('Upload score successfully.')
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 

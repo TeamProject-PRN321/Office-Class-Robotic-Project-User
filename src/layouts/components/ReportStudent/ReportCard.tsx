@@ -13,6 +13,7 @@ import CardContent from '@mui/material/CardContent'
 import useAxios from 'src/@core/hooks/useAxios'
 import { Box, Chip, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { useRouter } from 'next/router'
+import moment from 'moment'
 
 export interface ReportAttendanceModel {
   studentName: string
@@ -31,6 +32,18 @@ export interface AttendanceDetail {
   description: null
 }
 
+export interface ReportGradeModel {
+  studentName: string
+  className: string
+  subjectName: string
+  grades: Grade[]
+}
+
+export interface Grade {
+  'Kiem tra 15p'?: number
+  'Kiem tra 1T'?: number
+}
+
 interface ReportCardProperties {
   studentId: string
 }
@@ -40,6 +53,7 @@ const ReportCard = (prop: ReportCardProperties) => {
   const [value, setValue] = useState<string>('1')
 
   const [attendance, setAttendance] = useState<ReportAttendanceModel[]>([])
+  const [grade, setGrade] = useState<ReportGradeModel[]>([])
   const [changeClassName, setChangeClassName] = useState<string>()
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
@@ -75,8 +89,22 @@ const ReportCard = (prop: ReportCardProperties) => {
     }
   }
 
+  const handleGetGrade = async () => {
+    try {
+      const data = await axios.call(
+        'get',
+        'https://localhost:7254/api/v1/student/get-all-studentsGrades/' + prop.studentId
+      )
+
+      setGrade(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     handleGetAttendance()
+    handleGetGrade()
   }, [prop])
 
   return (
@@ -88,10 +116,6 @@ const ReportCard = (prop: ReportCardProperties) => {
         </TabList>
         <CardContent>
           <TabPanel value='1' sx={{ p: 0 }}>
-            {/* <Typography variant='h6' sx={{ marginBottom: 2 }}>
-              Attendance
-            </Typography> */}
-
             <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
               <Table
                 sx={{
@@ -104,24 +128,26 @@ const ReportCard = (prop: ReportCardProperties) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {attendance.at(0)?.subjectsAttendance.map((reportAtten, index) => {
-                    return (
-                      <TableRow key={index}>
-                        <TableCell
-                          sx={{
-                            ':hover': {
-                              fontWeight: 'bold',
-                              fontSize: '15px'
-                            }
-                          }}
-                          onClick={() => {
-                            setChangeClassName(reportAtten.className)
-                          }}
-                        >
-                          {reportAtten.className}
-                        </TableCell>
-                      </TableRow>
-                    )
+                  {attendance.map(classes => {
+                    return classes.subjectsAttendance.map((reportAtten, index) => {
+                      return (
+                        <TableRow key={index}>
+                          <TableCell
+                            sx={{
+                              ':hover': {
+                                fontWeight: 'bold',
+                                fontSize: '15px'
+                              }
+                            }}
+                            onClick={() => {
+                              setChangeClassName(reportAtten.className)
+                            }}
+                          >
+                            {reportAtten.className}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })
                   })}
                 </TableBody>
               </Table>
@@ -140,19 +166,23 @@ const ReportCard = (prop: ReportCardProperties) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {attendance
-                    .at(0)
-                    ?.subjectsAttendance.filter(check => check.className === changeClassName)
-                    .at(0)
-                    ?.attendanceDetails.map((value, index) => {
-                      return (
-                        <TableRow key={index}>
-                          <TableCell>{value.dateStudy}</TableCell>
-                          <TableCell>{handleCheckStatus(value.attendStatus)}</TableCell>
-                          <TableCell>{value.description}</TableCell>
-                        </TableRow>
-                      )
-                    })}
+                  {attendance.map(reportClasses =>
+                    reportClasses.subjectsAttendance
+                      .filter(check => check.className === changeClassName)
+                      .at(0)
+                      ?.attendanceDetails.sort((asc, after) => {
+                        return moment(asc.dateStudy).isAfter(after.dateStudy) ? 0 : -1
+                      })
+                      .map((value, index) => {
+                        return (
+                          <TableRow key={index}>
+                            <TableCell>{moment(value.dateStudy).format('DD-MM-YYYY')}</TableCell>
+                            <TableCell>{handleCheckStatus(value.attendStatus)}</TableCell>
+                            <TableCell>{value.description}</TableCell>
+                          </TableRow>
+                        )
+                      })
+                  )}
                 </TableBody>
               </Table>
             </Box>
@@ -167,24 +197,97 @@ const ReportCard = (prop: ReportCardProperties) => {
                   route.back()
                 }}
               >
-                Continue
+                Back to Schedule
               </Button>
             </Box>
           </TabPanel>
 
           <TabPanel value='2' sx={{ p: 0 }}>
-            <Typography variant='h6' sx={{ marginBottom: 2 }}>
-              Grade
-            </Typography>
+            <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+              <Table
+                sx={{
+                  cursor: 'pointer'
+                }}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Class</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {attendance.map(classes => {
+                    return classes.subjectsAttendance.map((reportAtten, index) => {
+                      return (
+                        <TableRow key={index}>
+                          <TableCell
+                            sx={{
+                              ':hover': {
+                                fontWeight: 'bold',
+                                fontSize: '15px'
+                              }
+                            }}
+                            onClick={() => {
+                              setChangeClassName(reportAtten.className)
+                            }}
+                          >
+                            {reportAtten.className}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })
+                  })}
+                </TableBody>
+              </Table>
 
-            <Button
-              variant='contained'
-              onClick={() => {
-                route.back()
-              }}
-            >
-              Continue
-            </Button>
+              {/* Data Grade */}
+              <Table
+                sx={{
+                  cursor: 'pointer'
+                }}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Check 15p</TableCell>
+                    <TableCell>Check 1 period</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {grade.map(reportClasses =>
+                    reportClasses.grades
+
+                      //.filter(check => check === changeClassName)
+
+                      // .at(0)
+                      // ?.attendanceDetails.sort((asc, after) => {
+                      //   return moment(asc.dateStudy).isAfter(after.dateStudy) ? 0 : -1
+                      // })
+                      .map((value, index) => {
+                        return (
+                          <TableRow key={index}>
+                            {/* <TableCell>{grade.map(data => data.subjectName)}</TableCell> */}
+                            <TableCell>{value['Kiem tra 15p']}</TableCell>
+                            <TableCell>{value['Kiem tra 1T']}</TableCell>
+                          </TableRow>
+                        )
+                      })
+                  )}
+                </TableBody>
+              </Table>
+            </Box>
+
+            <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+              <Button
+                variant='contained'
+                sx={{
+                  margin: '15px'
+                }}
+                onClick={() => {
+                  route.back()
+                }}
+              >
+                Back to Schedule
+              </Button>
+            </Box>
           </TabPanel>
         </CardContent>
       </TabContext>
