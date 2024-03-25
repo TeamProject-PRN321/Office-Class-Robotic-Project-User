@@ -1,6 +1,6 @@
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
-import { SchoolOutline } from 'mdi-material-ui'
+import { Laptop, SchoolOutline } from 'mdi-material-ui'
 import { Schedule } from '@mui/icons-material'
 
 const TeacherNavigation = (): VerticalNavItemsType => {
@@ -14,6 +14,11 @@ const TeacherNavigation = (): VerticalNavItemsType => {
       title: 'Subject',
       icon: Schedule,
       path: '/subjects'
+    },
+    {
+      title: 'Device',
+      icon: Laptop,
+      path: '/devices'
     },
     {
       sectionTitle: 'Information'

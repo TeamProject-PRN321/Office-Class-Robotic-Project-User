@@ -8,7 +8,6 @@ import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
 import Button from '@mui/material/Button'
 import TabContext from '@mui/lab/TabContext'
-import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import useAxios from 'src/@core/hooks/useAxios'
 import { Box, Chip, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
@@ -256,8 +255,7 @@ const ReportCard = (prop: ReportCardProperties) => {
                     reportClasses.grades
 
                       //.filter(check => check === changeClassName)
-
-                      // .at(0)
+                      //   .at(0)
                       // ?.attendanceDetails.sort((asc, after) => {
                       //   return moment(asc.dateStudy).isAfter(after.dateStudy) ? 0 : -1
                       // })
@@ -265,7 +263,7 @@ const ReportCard = (prop: ReportCardProperties) => {
                         return (
                           <TableRow key={index}>
                             {/* <TableCell>{grade.map(data => data.subjectName)}</TableCell> */}
-                            <TableCell>{value['Kiem tra 15p']}</TableCell>
+                            <TableCell>{value['Kiem tra 15p']} </TableCell>
                             <TableCell>{value['Kiem tra 1T']}</TableCell>
                           </TableRow>
                         )

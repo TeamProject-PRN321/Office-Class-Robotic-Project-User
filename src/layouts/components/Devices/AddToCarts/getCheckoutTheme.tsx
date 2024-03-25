@@ -1,4 +1,3 @@
-import type {} from '@mui/material/themeCssVarsAugmentation'
 import { ThemeOptions, alpha } from '@mui/material/styles'
 import { red } from '@mui/material/colors'
 import { PaletteMode } from '@mui/material'

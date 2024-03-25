@@ -76,7 +76,8 @@ export default function DeviceItems() {
   const role = authen.role
 
   const isAdmin = () => role === 'Admin'
-  const isTeacher = () => role === 'Teacher'
+
+  //const isTeacher = () => role === 'Teacher'
 
   const ViewDetailDeviceItems = (deviceCategoryId: string) => {
     route.push({
@@ -112,7 +113,11 @@ export default function DeviceItems() {
 
     //console.log(`Added to cart: ${item.deviceCategoryName}`)
     const updatedCart = [...cart, { ...item, quantity }]
-    setCart(updatedCart)
+
+    //chỗ này gọi API update giỏ hàng chưa mà bảo NULL nè
+    setCart(updatedCart) // cái data đang trả null đó
+
+    console.log(updatedCart)
 
     toast.success('Device đã được thêm vào giỏ hàng')
   }

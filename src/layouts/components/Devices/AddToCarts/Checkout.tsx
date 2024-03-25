@@ -96,12 +96,7 @@ export default function Checkout() {
               height: 150
             }}
           >
-            <Button
-              startIcon={<ArrowBackRoundedIcon />}
-              component='a'
-              href='/material-ui/getting-started/templates/landing-page/'
-              sx={{ ml: '-8px' }}
-            >
+            <Button startIcon={<ArrowBackRoundedIcon />} component='a' href='/' sx={{ ml: '-8px' }}>
               Back to
               <svg
                 style={logoStyle}
@@ -161,9 +156,7 @@ export default function Checkout() {
                   </g>
                 </g>
               </svg>
-              <HeaderTitle variant='h8' sx={{ ml: 3 }}>
-                {themeConfig.templateName}
-              </HeaderTitle>
+              <HeaderTitle sx={{ ml: 3 }}>{themeConfig.templateName}</HeaderTitle>
             </Button>
           </Box>
           <Box
@@ -310,7 +303,7 @@ export default function Checkout() {
               ))}
             </Stepper>
             {activeStep === steps.length ? (
-              <Stack spacing={2} useFlexGap>
+              <Stack>
                 <Typography variant='h1'>📦</Typography>
                 <Typography variant='h5'>Thank you for your order!</Typography>
                 <Typography variant='body1' color='text.secondary'>
