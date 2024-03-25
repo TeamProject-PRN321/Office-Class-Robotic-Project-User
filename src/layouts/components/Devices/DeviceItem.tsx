@@ -2,6 +2,7 @@ import { Button, Card, Grid, Slider, TextField, Typography, styled } from '@mui/
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import { toast } from 'react-toastify'
+import { useCart } from 'src/@core/context/CartProvider'
 import useAuth from 'src/@core/hooks/useAuth'
 import useAxios from 'src/@core/hooks/useAxios'
 
@@ -62,13 +63,21 @@ export interface DeviceCategoryModel {
   ]
 }
 
+// interface DeviceItemsProps {
+//   cart: any[]
+//   setCart: React.Dispatch<React.SetStateAction<any[]>>
+// }
+
 /*call api*/
 const API_GET_ALL_DEVICE_CATEGORY = '/api/v1/device'
 
 export default function DeviceItems() {
   const [deviceCategories, setDeviceCategries] = React.useState<DeviceCategoryModel[]>([])
   const [quantity, setQuantity] = React.useState<number>(1)
-  const [cart, setCart] = React.useState([])
+
+  const [cart, setCart] = useCart()
+
+  //const [localCart, setLocalCart] = React.useState<any[]>([])
 
   const route = useRouter()
   const axiosClient = useAxios()
@@ -112,10 +121,26 @@ export default function DeviceItems() {
     }
 
     //console.log(`Added to cart: ${item.deviceCategoryName}`)
-    const updatedCart = [...cart, { ...item, quantity }]
+    const updatedCart = [...cart]
+    const existingCartItemIndex = updatedCart.findIndex(cartItem => cartItem.deviceCategoryId === item.deviceCategoryId)
 
-    //chỗ này gọi API update giỏ hàng chưa mà bảo NULL nè
-    setCart(updatedCart) // cái data đang trả null đó
+    if (existingCartItemIndex !== -1) {
+      const updatedQuantity = updatedCart[existingCartItemIndex].quantity + quantity
+      if (updatedQuantity > item.quantityOfDeviceInStorageCanBorrow) {
+        toast.error('Vượt quá số lượng có sẵn')
+
+        return
+      }
+      updatedCart[existingCartItemIndex].quantity = updatedQuantity
+    } else {
+      if (quantity > item.quantityOfDeviceInStorageCanBorrow) {
+        toast.error('Vượt quá số lượng có sẵn')
+
+        return
+      }
+      updatedCart.push({ ...item, quantity })
+    }
+    setCart(updatedCart)
 
     console.log(updatedCart)
 
@@ -225,7 +250,7 @@ export default function DeviceItems() {
             </Grid>
             <Grid item>
               <Typography sx={{ marginRight: '10px' }}>
-                Số lượng sản phẩm hiện có: {item.quantityOfDeviceInStorageInTotal}
+                Số lượng sản phẩm hiện có: {item.quantityOfDeviceInStorageCanBorrow}
               </Typography>
             </Grid>
           </Grid>

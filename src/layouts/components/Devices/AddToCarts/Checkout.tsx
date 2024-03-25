@@ -22,6 +22,7 @@ import Info from './Info'
 import ToggleColorMode from './ToggleColorMode'
 import InfoMobile from './InfoMobile'
 import themeConfig from 'src/configs/themeConfig'
+import { useCart } from 'src/@core/context/CartProvider'
 
 const steps = ['Information teacher', 'Review your borrow device']
 
@@ -55,6 +56,7 @@ export default function Checkout() {
   const [mode, setMode] = React.useState<PaletteMode>('light')
   const [activeStep, setActiveStep] = React.useState(0)
   const theme = useTheme()
+  const [cart, setCart] = useCart()
 
   const toggleColorMode = () => {
     setMode(prev => (prev === 'dark' ? 'light' : 'dark'))
@@ -67,6 +69,8 @@ export default function Checkout() {
   const handleBack = () => {
     setActiveStep(activeStep - 1)
   }
+
+  console.log(cart)
 
   return (
     <Card sx={{ height: '100%' }}>
@@ -168,7 +172,8 @@ export default function Checkout() {
               maxWidth: 500
             }}
           >
-            <Info totalDeviceBorrow={activeStep >= 0 ? 21 : 23} />
+            {/* <Info totalDeviceBorrow={activeStep >= 0 ? 21 : 23} /> */}
+            <Info totalDeviceBorrow={2} cart={cart} />
           </Box>
         </Grid>
         <Grid
@@ -237,8 +242,8 @@ export default function Checkout() {
                 {steps.map(label => (
                   <Step
                     sx={{
-                      ':first-child': { pl: 0 },
-                      ':last-child': { pr: 0 }
+                      ':first-of-type': { pl: 0 },
+                      ':last-of-type': { pr: 0 }
                     }}
                     key={label}
                   >
@@ -292,8 +297,8 @@ export default function Checkout() {
               {steps.map(label => (
                 <Step
                   sx={{
-                    ':first-child': { pl: 0 },
-                    ':last-child': { pr: 0 },
+                    ':first-of-type': { pl: 0 },
+                    ':last-of-type': { pr: 0 },
                     '& .MuiStepConnector-root': { top: { xs: 6, sm: 12 } }
                   }}
                   key={label}
