@@ -77,7 +77,7 @@ export default function DeviceItems() {
 
   const isAdmin = () => role === 'Admin'
 
-  //const isTeacher = () => role === 'Teacher'
+  const isTeacher = () => role === 'Teacher'
 
   const ViewDetailDeviceItems = (deviceCategoryId: string) => {
     route.push({
@@ -138,7 +138,8 @@ export default function DeviceItems() {
           View details
         </Button>
       )
-    } else {
+    }
+    if (isTeacher()) {
       return (
         <Grid container alignItems='center' spacing={1}>
           <TextField
