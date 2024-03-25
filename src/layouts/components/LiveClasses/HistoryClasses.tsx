@@ -57,7 +57,7 @@ export default function HistoryClasses({ data }: HistoryClassesProps) {
   const handleCheckAttendance = (studentId: string) => {
     const studentIndex = studentList.findIndex(x => x.studentId === studentId)
     if (studentIndex < 0) {
-      console.log('Không tìm thấy studentId ' + studentId)
+      console.log('Not found studentId ' + studentId)
 
       return
     }

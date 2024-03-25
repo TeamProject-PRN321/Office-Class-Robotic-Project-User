@@ -4,15 +4,20 @@ import moment from 'moment'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
+import Drawer from '@mui/material/Drawer'
+
+// import Dialog from '@mui/material/Dialog'
+// import DialogActions from '@mui/material/DialogActions'
+// import DialogContent from '@mui/material/DialogContent'
+// import DialogContentText from '@mui/material/DialogContentText'
+// import DialogTitle from '@mui/material/DialogTitle'
 
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { ClassModel } from './AddNewClass/NewClassFormLiveClass'
 import useAuth from 'src/@core/hooks/useAuth'
+import StudentDrawer from './StudentInClass/StudentDrawer'
+import useAxios from 'src/@core/hooks/useAxios'
+import { StudentModel } from './HistoryClasses'
 
 interface LiveClassItemsProps {
   data: ClassModel
@@ -20,19 +25,33 @@ interface LiveClassItemsProps {
 
 export default function LiveClassItems({ data }: LiveClassItemsProps) {
   const route = useRouter()
+  const [studentList, setStudentList] = React.useState<StudentModel[]>([])
+  const [state, setState] = React.useState(false)
 
-  const [open, setOpen] = React.useState(false)
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
+  const axiosClient = useAxios()
 
   const handleUpGradeStudent = () => {
     route.push('/students/' + data.className)
+  }
+
+  const toggleDrawer = async () => {
+    await fetchDataStudent()
+    setState(!state)
+  }
+
+  const fetchDataStudent = async () => {
+    try {
+      const response = await axiosClient.call(
+        'get',
+        '/api/v1/attendances/' + data.className + '/' + moment(data.dayStudy, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+        null,
+        true
+      )
+
+      setStudentList(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const auth = useAuth()
@@ -68,16 +87,28 @@ export default function LiveClassItems({ data }: LiveClassItemsProps) {
       >
         Status: {data.classWasCheckedAttendant ? 'Completed' : 'Waiting'}
       </Typography>
-      <Button
-        sx={{ backgroundColor: '#9155fd', color: 'white', ':hover': { backgroundColor: '#008BC5', color: 'white' } }}
-        onClick={() => {
-          handleClickOpen()
-        }}
-      >
-        John now
-      </Button>
 
-      <Dialog
+      {/* Drawer studentList */}
+      {(['right'] as const).map(anchor => (
+        <React.Fragment key={anchor}>
+          <Button
+            sx={{
+              backgroundColor: '#9155fd',
+              color: 'white',
+              ':hover': { backgroundColor: '#008BC5', color: 'white' }
+            }}
+            onClick={toggleDrawer}
+          >
+            View student
+          </Button>
+          <Drawer anchor={anchor} open={state} onClose={toggleDrawer}>
+            <StudentDrawer students={studentList}></StudentDrawer>
+          </Drawer>
+        </React.Fragment>
+      ))}
+
+      {/* Dialog */}
+      {/* <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby='alert-dialog-title'
@@ -104,7 +135,7 @@ export default function LiveClassItems({ data }: LiveClassItemsProps) {
             Continue
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
 
       {role === 'Teacher' && (
         <Button
@@ -113,7 +144,7 @@ export default function LiveClassItems({ data }: LiveClassItemsProps) {
             handleUpGradeStudent()
           }}
         >
-          Students in class
+          Upload grade
         </Button>
       )}
     </Card>

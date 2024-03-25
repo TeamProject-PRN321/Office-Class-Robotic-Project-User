@@ -115,6 +115,7 @@ export default function AttendanceReportDrawer({
           Submit attendance
         </Button>
       </Grid>
+
       <Grid item paddingBottom={'20px'} xl={12} lg={12} md={12} width={'100%'}>
         <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '18px', width: '100%' }}>
           {classData.className}
