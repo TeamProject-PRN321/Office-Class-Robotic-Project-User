@@ -341,6 +341,8 @@ export default function DialogForm() {
                 timeIntervals={15}
                 id='startTime'
                 placeholderText='HH:mm'
+                minTime={moment('07:00', 'HH:mm').toDate()}
+                maxTime={moment('21:00', 'HH:mm').toDate()}
                 dateFormat={'HH:mm'}
                 customInput={
                   <TextField
@@ -360,6 +362,8 @@ export default function DialogForm() {
                 timeIntervals={15}
                 id='endTime'
                 placeholderText='HH:mm'
+                minTime={moment('07:00', 'HH:mm').toDate()}
+                maxTime={moment('23:00', 'HH:mm').toDate()}
                 dateFormat={'HH:mm'}
                 customInput={<TextField fullWidth helperText='Please choose end time' sx={{ fontSize: '15px' }} />}
                 onChange={(timeEnded: Date) => setTimeEnded(timeEnded.toString())}
@@ -416,6 +420,7 @@ export default function DialogForm() {
                 id='startTime'
                 placeholderText='dd:MM:yyyy'
                 dateFormat={'dd:MM:yyyy'}
+                minDate={moment().toDate()}
                 customInput={
                   <TextField
                     fullWidth
