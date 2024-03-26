@@ -10,6 +10,7 @@ import DialogFormAddDevice from 'src/layouts/components/Devices/AddNewDevice/Dia
 import TeacherViewHistoryBorrowDevice from 'src/layouts/components/Devices/TeacherViewHistoryBorrow/TeacherViewHistoryBorrowDevice'
 import { CartProvider } from 'src/@core/context/CartProvider'
 import AdminManageBorrowDevice from 'src/layouts/components/Devices/AdminManageDevice/AdminManageBorrowDevice'
+import AdminViewAllHistoryBorrowDevice from 'src/layouts/components/Devices/AdminViewAllHistory/AdminViewAllHistoryBorrowDevice'
 
 export default function App() {
   // ** State
@@ -31,6 +32,7 @@ export default function App() {
           <Tab sx={{ fontWeight: 'bold' }} value='1' label='Device' />
           {role === 'Teacher' && <Tab sx={{ fontWeight: 'bold' }} value='2' label='Rental history' />}
           {role === 'Admin' && <Tab sx={{ fontWeight: 'bold' }} value='2' label='Manage Rental Device' />}
+          {role === 'Admin' && <Tab sx={{ fontWeight: 'bold' }} value='3' label='View All History' />}
         </TabList>
         <CardContent>
           <TabPanel value='1' sx={{ p: 0 }}>
@@ -143,6 +145,45 @@ export default function App() {
 
                 <Grid item>
                   <AdminManageBorrowDevice></AdminManageBorrowDevice>
+                </Grid>
+              </Grid>
+            </TabPanel>
+          )}
+
+          {role === 'Admin' && (
+            <TabPanel value='3' sx={{ p: 0 }}>
+              <Grid container direction={'row'} spacing={4}>
+                <Grid
+                  item
+                  display={'flex'}
+                  flexWrap={'wrap'}
+                  justifyContent={'space-between'}
+                  width={'100%'}
+                  alignItems={'center'}
+                >
+                  <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '20px' }}>
+                    All History Borrow Device
+                  </Typography>
+                  <Button
+                    sx={{
+                      backgroundColor: '#C4FCEF',
+                      color: '#50bf62',
+                      fontWeight: 'bold',
+                      fontSize: '13px',
+                      textDecoration: 'underline',
+                      ':hover': {
+                        color: 'white',
+                        backgroundColor: '#0081CF'
+                      }
+                    }}
+                  >
+                    <Plus sx={{ marginRight: '2px', fontSize: '16px' }}></Plus>
+                    Add Device
+                  </Button>
+                </Grid>
+
+                <Grid item>
+                  <AdminViewAllHistoryBorrowDevice></AdminViewAllHistoryBorrowDevice>
                 </Grid>
               </Grid>
             </TabPanel>

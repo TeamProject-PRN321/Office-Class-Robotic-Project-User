@@ -1,7 +1,6 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import {
   Box,
-  Button,
   Collapse,
   IconButton,
   Paper,
@@ -45,8 +44,8 @@ export interface BorrowDeviceCategoryModel {
   ]
 }
 
-function Row(props: { row: BorrowDeviceCategoryModel; onAccept: () => void; onReject: () => void }) {
-  const { row, onAccept, onReject } = props
+function Row(props: { row: BorrowDeviceCategoryModel }) {
+  const { row } = props
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -85,7 +84,6 @@ function Row(props: { row: BorrowDeviceCategoryModel; onAccept: () => void; onRe
               sx={{
                 fontWeight: 'bold',
                 fontSize: '13px',
-                textDecoration: 'underline',
                 backgroundColor: '#4caf50',
                 color: '#fff',
                 padding: '8px 12px',
@@ -102,7 +100,6 @@ function Row(props: { row: BorrowDeviceCategoryModel; onAccept: () => void; onRe
               sx={{
                 fontWeight: 'bold',
                 fontSize: '13px',
-                textDecoration: 'underline',
                 backgroundColor: '#2196f3',
                 color: '#fff',
                 padding: '8px 12px',
@@ -119,7 +116,6 @@ function Row(props: { row: BorrowDeviceCategoryModel; onAccept: () => void; onRe
               sx={{
                 fontWeight: 'bold',
                 fontSize: '13px',
-                textDecoration: 'underline',
                 backgroundColor: '#f44336',
                 color: '#fff',
                 padding: '8px 12px',
@@ -135,16 +131,6 @@ function Row(props: { row: BorrowDeviceCategoryModel; onAccept: () => void; onRe
         <TableCell align='center'>{row.borrowPurpose}</TableCell>
         <TableCell align='center'>
           <QRCode value={String(row.borrowDeviceId)} size={60} />
-        </TableCell>
-        <TableCell align='center'>
-          <Button onClick={onAccept} variant='contained' sx={{ bgcolor: '#4caf50', color: '#fff' }}>
-            Accept
-          </Button>
-        </TableCell>
-        <TableCell align='center'>
-          <Button onClick={onReject} variant='contained' sx={{ bgcolor: '#f44336', color: '#fff' }}>
-            Reject
-          </Button>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -190,47 +176,24 @@ function Row(props: { row: BorrowDeviceCategoryModel; onAccept: () => void; onRe
   )
 }
 
-export default function AdminManageBorrowDevice() {
+export default function AdminViewAllHistoryBorrowDevice() {
   const axiosClient = useAxios()
-  const [allBorrowDeviceOfTeacherData, setAllBorrowDeviceOfTeacherData] = React.useState<BorrowDeviceCategoryModel[]>()
+  const [allBorrowDeviceData, setAllBorrowDeviceData] = React.useState<BorrowDeviceCategoryModel[]>()
   const authen = useAuth()
   const appUserId = authen.Id
 
-  const handleAccept = async (borrowDeviceId: string) => {
-    try {
-      await axiosClient.call('get', `/api/v1/borrowdevice/admin-accept-request/${borrowDeviceId}`)
-
-      //fetchAllBorrowDeviceOfTeacherData();
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const handleReject = async (borrowDeviceId: string) => {
-    try {
-      await axiosClient.call('get', `/api/v1/borrowdevice/admin-reject-request/${borrowDeviceId}`)
-
-      //fetchAllBorrowDeviceOfTeacherData();
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   React.useEffect(() => {
-    const fetchAllBorrowDeviceOfTeacherData = async () => {
+    const fetchAllBorrowDeviceData = async () => {
       try {
-        const response = await axiosClient.call(
-          'get',
-          `/api/v1/borrowdevice/get-all-request-borrow-device-does-not-process-before`
-        )
-        setAllBorrowDeviceOfTeacherData(response as BorrowDeviceCategoryModel[])
+        const response = await axiosClient.call('get', `/api/v1/borrowdevice/get-all-request-borrow-device`)
+        setAllBorrowDeviceData(response as BorrowDeviceCategoryModel[])
       } catch (error) {
         console.log(error)
       }
     }
 
     if (appUserId) {
-      fetchAllBorrowDeviceOfTeacherData()
+      fetchAllBorrowDeviceData()
     }
   }, [appUserId, axiosClient])
 
@@ -247,20 +210,10 @@ export default function AdminManageBorrowDevice() {
             <TableCell align='right'>Borrow Status</TableCell>
             <TableCell align='center'>Purpose</TableCell>
             <TableCell align='center'>Code</TableCell>
-            <TableCell align='center'>Accept</TableCell>
-            <TableCell align='center'>Reject</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {allBorrowDeviceOfTeacherData &&
-            allBorrowDeviceOfTeacherData.map(item => (
-              <Row
-                key={item.borrowDeviceId}
-                row={item}
-                onAccept={() => handleAccept(item.borrowDeviceId)}
-                onReject={() => handleReject(item.borrowDeviceId)}
-              />
-            ))}
+          {allBorrowDeviceData && allBorrowDeviceData.map(item => <Row key={item.borrowDeviceId} row={item} />)}
         </TableBody>
       </Table>
     </TableContainer>

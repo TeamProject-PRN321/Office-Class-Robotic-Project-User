@@ -84,7 +84,6 @@ function Row(props: { row: BorrowDeviceCategoryModel }) {
               sx={{
                 fontWeight: 'bold',
                 fontSize: '13px',
-                textDecoration: 'underline',
                 backgroundColor: '#4caf50',
                 color: '#fff',
                 padding: '8px 12px',
@@ -101,7 +100,6 @@ function Row(props: { row: BorrowDeviceCategoryModel }) {
               sx={{
                 fontWeight: 'bold',
                 fontSize: '13px',
-                textDecoration: 'underline',
                 backgroundColor: '#2196f3',
                 color: '#fff',
                 padding: '8px 12px',
@@ -118,7 +116,6 @@ function Row(props: { row: BorrowDeviceCategoryModel }) {
               sx={{
                 fontWeight: 'bold',
                 fontSize: '13px',
-                textDecoration: 'underline',
                 backgroundColor: '#f44336',
                 color: '#fff',
                 padding: '8px 12px',
