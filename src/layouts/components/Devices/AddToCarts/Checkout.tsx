@@ -132,7 +132,9 @@ export default function Checkout() {
 
       //call api post api/v1/borrowdevice/create-request-borrow-device
 
-      await axios.call('post', '/api/v1/borrowdevice/create-request-borrow-device', data, true)
+      const check = await axios.call('post', '/api/v1/borrowdevice/create-request-borrow-device', data, true)
+      console.log(check)
+
       toast.success('Mượn thành công')
 
       setActiveStep(activeStep + 1)
@@ -287,12 +289,7 @@ export default function Checkout() {
                 justifyContent: 'space-between'
               }}
             >
-              <Button
-                startIcon={<ArrowBackRoundedIcon />}
-                component='a'
-                href='/material-ui/getting-started/templates/landing-page/'
-                sx={{ alignSelf: 'start' }}
-              >
+              <Button startIcon={<ArrowBackRoundedIcon />} component='a' href='/' sx={{ alignSelf: 'start' }}>
                 Back to
               </Button>
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />

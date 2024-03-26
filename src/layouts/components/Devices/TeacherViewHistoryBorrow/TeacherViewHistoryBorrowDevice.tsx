@@ -1,6 +1,7 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import {
   Box,
+  Button,
   Collapse,
   IconButton,
   Paper,
@@ -15,6 +16,7 @@ import {
 import moment from 'moment'
 import * as React from 'react'
 import QRCode from 'react-qr-code'
+import { toast } from 'react-toastify'
 import useAuth from 'src/@core/hooks/useAuth'
 import useAxios from 'src/@core/hooks/useAxios'
 
@@ -44,9 +46,22 @@ export interface BorrowDeviceCategoryModel {
   ]
 }
 
-function Row(props: { row: BorrowDeviceCategoryModel }) {
+function Row(props: { row: BorrowDeviceCategoryModel; fetchData: () => void }) {
   const { row } = props
   const [open, setOpen] = React.useState(false)
+  const axiosClient = useAxios()
+  const auth = useAuth()
+  const appUSerId = auth.Id
+
+  const handleTra = async () => {
+    try {
+      if (window.confirm('Bạn có muốn trả hay không?')) {
+        await axiosClient.call('get', '/api/v1/borrowdevice/teacher-give-back-/' + row.borrowDeviceId + '/' + appUSerId)
+        props.fetchData()
+        toast.success('Trả thành công.')
+      }
+    } catch (error) {}
+  }
 
   return (
     <React.Fragment>
@@ -132,6 +147,13 @@ function Row(props: { row: BorrowDeviceCategoryModel }) {
         <TableCell align='center'>
           <QRCode value={String(row.borrowDeviceId)} size={60} />
         </TableCell>
+        <TableCell align='center'>
+          {row.borrowStatus === 1 && (
+            <Button variant='contained' color='info' onClick={handleTra}>
+              Trả
+            </Button>
+          )}
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -187,7 +209,9 @@ export default function TeacherViewHistoryBorrowDevice() {
       try {
         const response = await axiosClient.call(
           'get',
-          `/api/v1/borrowdevice/teacher-view-all-request-borrow-device/${appUserId}`
+          `/api/v1/borrowdevice/teacher-view-all-request-borrow-device/${appUserId}`,
+          null,
+          true
         )
         setAllBorrowDeviceOfTeacherData(response as BorrowDeviceCategoryModel[])
       } catch (error) {
@@ -199,6 +223,18 @@ export default function TeacherViewHistoryBorrowDevice() {
       fetchAllBorrowDeviceOfTeacherData()
     }
   }, [appUserId, axiosClient])
+
+  const fetchData = async () => {
+    try {
+      const response = await axiosClient.call(
+        'get',
+        `/api/v1/borrowdevice/teacher-view-all-request-borrow-device/${appUserId}`
+      )
+      setAllBorrowDeviceOfTeacherData(response as BorrowDeviceCategoryModel[])
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -213,11 +249,14 @@ export default function TeacherViewHistoryBorrowDevice() {
             <TableCell align='right'>Borrow Status</TableCell>
             <TableCell align='center'>Purpose</TableCell>
             <TableCell align='center'>Code</TableCell>
+            <TableCell align='center'>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {allBorrowDeviceOfTeacherData &&
-            allBorrowDeviceOfTeacherData.map(item => <Row key={item.borrowDeviceId} row={item} />)}
+            allBorrowDeviceOfTeacherData.map(item => (
+              <Row key={item.borrowDeviceId} row={item} fetchData={fetchData} />
+            ))}
         </TableBody>
       </Table>
     </TableContainer>
