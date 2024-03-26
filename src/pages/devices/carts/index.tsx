@@ -1,9 +1,14 @@
+import { Card } from '@mui/material'
 import { CartProvider } from 'src/@core/context/CartProvider'
 import Checkout from 'src/layouts/components/Devices/AddToCarts/Checkout'
 import DeviceItems from 'src/layouts/components/Devices/DeviceItem'
 
 export default function App() {
-  //const [cart, setCart] = useState([])
+  // const [cart, setCart] = useState([])
+  // const [showDeviceItems, setShowDeviceItems] = useState(false)
+  // const updateCart = (newCart) => {
+  //   setCart(newCart);
+  // };
 
   return (
     <CartProvider>
@@ -11,7 +16,9 @@ export default function App() {
       <Checkout cart={cart} /> */}
 
       <DeviceItems />
-      <Checkout />
+      <Card>
+        <Checkout />
+      </Card>
     </CartProvider>
   )
 }

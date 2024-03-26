@@ -23,8 +23,46 @@ import ToggleColorMode from './ToggleColorMode'
 import InfoMobile from './InfoMobile'
 import themeConfig from 'src/configs/themeConfig'
 import { useCart } from 'src/@core/context/CartProvider'
+import useAuth from 'src/@core/hooks/useAuth'
+import useAxios from 'src/@core/hooks/useAxios'
+import { toast } from 'react-toastify'
+import moment from 'moment'
 
 const steps = ['Information teacher', 'Review your borrow device']
+export interface NewBorrowDeviceModel {
+  borrowPurpose: string
+  appUserTeacherId: string
+  listDeviceCategoryAndQuantity: [
+    {
+      deviceCategoryId: string
+      quantityTeacherWantToBorrow: number
+    }
+  ]
+  listSlotWantToBorrow: [
+    {
+      className: string
+      classRoomName: string
+      dayStudy: string
+      startTime: string
+      endTime: string
+    }
+  ]
+}
+export interface ListDeviceCategoryAndQuantityModel {
+  deviceCategoryId: string
+  quantityTeacherWantToBorrow: number
+}
+export interface ListSlotWantToBorrowModel {
+  className: string
+  classRoomName: string
+  dayStudy: string
+  startTime: string
+  endTime: string
+}
+
+export interface PurposeBorrowModel {
+  borrowPurpose: string
+}
 
 const HeaderTitle = styled(Typography)<TypographyProps>(({ theme }) => ({
   fontWeight: 600,
@@ -41,10 +79,10 @@ const logoStyle = {
   marginRight: '2px'
 }
 
-function getStepContent(step: number) {
+function getStepContent(step: number, handleDataChange: any) {
   switch (step) {
     case 0:
-      return <AddressForm />
+      return <AddressForm onDataChange={handleDataChange} />
     case 1:
       return <Review />
     default:
@@ -53,17 +91,56 @@ function getStepContent(step: number) {
 }
 
 export default function Checkout() {
+  const [deviceCategoryID, setDeviceCategoryID] = React.useState<string[]>([])
   const [mode, setMode] = React.useState<PaletteMode>('light')
   const [activeStep, setActiveStep] = React.useState(0)
   const theme = useTheme()
   const [cart, setCart] = useCart()
+  const authen = useAuth()
+  const appUserId = authen.Id
+  const axios = useAxios()
+
+  const [formData, setFormData] = React.useState({})
+  const handleDataChange = (data: any) => {
+    setFormData(data)
+  }
 
   const toggleColorMode = () => {
     setMode(prev => (prev === 'dark' ? 'light' : 'dark'))
   }
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1)
+  const handleNext = async () => {
+    //console.log(appUserId, cart as ListDeviceCategoryAndQuantityModel, formData.purpose)
+    try {
+      const data: NewBorrowDeviceModel = {
+        borrowPurpose: formData.purpose,
+        appUserTeacherId: appUserId,
+        listDeviceCategoryAndQuantity: cart.map(value => ({
+          deviceCategoryId: value.deviceCategoryId,
+          quantityTeacherWantToBorrow: value.quantity
+        })),
+        listSlotWantToBorrow: formData.teacherID.map(item => ({
+          className: item.className,
+          classRoomName: item.classroomName,
+          dayStudy: moment(item.dayStudy).format('YYYY-MM-DD'),
+          startTime: item.startTime,
+          endTime: item.endTime
+        }))
+      }
+
+      console.log(data)
+
+      //call api post api/v1/borrowdevice/create-request-borrow-device
+
+      await axios.call('post', '/api/v1/borrowdevice/create-request-borrow-device', data, true)
+      toast.success('Mượn thành công')
+
+      setActiveStep(activeStep + 1)
+    } catch (error) {
+      console.error('Đã xảy ra lỗi khi mượn thiết bị:', error)
+
+      toast.error('Đã xảy ra lỗi khi mượn thiết bị. Vui lòng thử lại sau.')
+    }
   }
 
   const handleBack = () => {
@@ -173,7 +250,7 @@ export default function Checkout() {
             }}
           >
             {/* <Info totalDeviceBorrow={activeStep >= 0 ? 21 : 23} /> */}
-            <Info totalDeviceBorrow={2} cart={cart} />
+            <Info cart={cart} />
           </Box>
         </Grid>
         <Grid
@@ -307,7 +384,7 @@ export default function Checkout() {
                 </Step>
               ))}
             </Stepper>
-            {activeStep === steps.length ? (
+            {activeStep === steps.length - 1 ? (
               <Stack>
                 <Typography variant='h1'>📦</Typography>
                 <Typography variant='h5'>Thank you for your order!</Typography>
@@ -328,7 +405,7 @@ export default function Checkout() {
               </Stack>
             ) : (
               <React.Fragment>
-                {getStepContent(activeStep)}
+                {getStepContent(activeStep, handleDataChange)}
                 <Box
                   sx={{
                     display: 'flex',
@@ -375,7 +452,7 @@ export default function Checkout() {
                       width: { xs: '100%', sm: 'fit-content' }
                     }}
                   >
-                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                    {activeStep === steps.length - 1 ? 'Back' : 'Place order'}
                   </Button>
                 </Box>
               </React.Fragment>

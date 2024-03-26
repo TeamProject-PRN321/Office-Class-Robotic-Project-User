@@ -9,14 +9,25 @@ interface Product {
   deviceCategoryName: string
   deviceCategoryId: string
   quantityOfDeviceInStorageCanBorrow: number
+  quantity: number
 }
 
 interface InfoProps {
-  totalDeviceBorrow: number
   cart: Product[]
 }
 
-export default function Info({ totalDeviceBorrow, cart }: InfoProps) {
+export default function Info({ cart }: InfoProps) {
+  const getTotalQuantity = cart => {
+    let totalQuantity = 0
+    cart.forEach(item => {
+      totalQuantity += item.quantity
+    })
+
+    return totalQuantity
+  }
+
+  const totalDeviceBorrow = getTotalQuantity(cart)
+
   return (
     <React.Fragment>
       <Typography variant='subtitle2' color='text.secondary'>
@@ -34,7 +45,7 @@ export default function Info({ totalDeviceBorrow, cart }: InfoProps) {
               secondary={`Device Id: ${product.deviceCategoryId}`}
             />
             <Typography variant='body1' fontWeight='medium'>
-              {product.quantityOfDeviceInStorageCanBorrow}
+              {product.quantity}
             </Typography>
           </ListItem>
         ))}
